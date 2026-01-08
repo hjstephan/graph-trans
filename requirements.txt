@@ -1,0 +1,10 @@
+# Core dependencies
+# (keine externen Abhängigkeiten für die Kernfunktionalität)
+
+# Development dependencies
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Optional: für zukünftige Visualisierung
+# matplotlib>=3.7.0
+# networkx>=3.1

@@ -42,7 +42,8 @@ pip install -r requirements.txt
 ## Verwendung
 
 ```python
-from graph_trans import Graph, Transformation, apply_transformation
+from graph import Graph
+from transformation import Transformation, apply_transformation
 
 # Beispiel: Definition einer Transformation
 transformation = Transformation(
