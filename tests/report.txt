@@ -1,0 +1,56 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0 -- /home/stephan/Git/zufall/venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/stephan/Git/graph-trans
+configfile: pytest.ini
+testpaths: tests
+plugins: cov-7.0.0
+collecting ... collected 34 items
+
+tests/test_graph.py::TestNode::test_node_creation PASSED                 [  2%]
+tests/test_graph.py::TestNode::test_node_with_attributes PASSED          [  5%]
+tests/test_graph.py::TestNode::test_node_equality PASSED                 [  8%]
+tests/test_graph.py::TestEdge::test_edge_creation PASSED                 [ 11%]
+tests/test_graph.py::TestEdge::test_edge_equality PASSED                 [ 14%]
+tests/test_graph.py::TestGraph::test_empty_graph PASSED                  [ 17%]
+tests/test_graph.py::TestGraph::test_graph_from_dicts PASSED             [ 20%]
+tests/test_graph.py::TestGraph::test_add_node PASSED                     [ 23%]
+tests/test_graph.py::TestGraph::test_add_edge PASSED                     [ 26%]
+tests/test_graph.py::TestGraph::test_add_edge_invalid_nodes PASSED       [ 29%]
+tests/test_graph.py::TestGraph::test_get_node PASSED                     [ 32%]
+tests/test_graph.py::TestGraph::test_get_nodes_by_color PASSED           [ 35%]
+tests/test_graph.py::TestGraph::test_get_edges_by_color PASSED           [ 38%]
+tests/test_graph.py::TestGraph::test_remove_node PASSED                  [ 41%]
+tests/test_graph.py::TestGraph::test_remove_nonexistent_node PASSED      [ 44%]
+tests/test_graph.py::TestGraph::test_remove_edge PASSED                  [ 47%]
+tests/test_graph.py::TestGraph::test_remove_nonexistent_edge PASSED      [ 50%]
+tests/test_graph.py::TestGraph::test_copy PASSED                         [ 52%]
+tests/test_graph.py::TestGraph::test_contains PASSED                     [ 55%]
+tests/test_graph.py::TestGraph::test_repr PASSED                         [ 58%]
+tests/test_transformation.py::TestTransformation::test_simple_transformation_creation PASSED [ 61%]
+tests/test_transformation.py::TestTransformation::test_transformation_with_creation PASSED [ 64%]
+tests/test_transformation.py::TestTransformation::test_transformation_with_deletion PASSED [ 67%]
+tests/test_transformation.py::TestTransformation::test_invalid_transformation_black_nodes_mismatch PASSED [ 70%]
+tests/test_transformation.py::TestTransformation::test_invalid_transformation_red_on_right PASSED [ 73%]
+tests/test_transformation.py::TestTransformation::test_invalid_transformation_green_on_left PASSED [ 76%]
+tests/test_transformation.py::TestTransformation::test_apply_identity_transformation PASSED [ 79%]
+tests/test_transformation.py::TestTransformation::test_apply_node_creation PASSED [ 82%]
+tests/test_transformation.py::TestTransformation::test_apply_node_deletion PASSED [ 85%]
+tests/test_transformation.py::TestTransformation::test_apply_transformation_not_applicable PASSED [ 88%]
+tests/test_transformation.py::TestTransformation::test_apply_transformation_helper_function PASSED [ 91%]
+tests/test_transformation.py::TestTransformation::test_transformation_preserves_original_graph PASSED [ 94%]
+tests/test_transformation.py::TestTransformation::test_complex_transformation PASSED [ 97%]
+tests/test_transformation.py::TestTransformation::test_repr PASSED       [100%]
+
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.3-final-0 ________________
+
+Name                    Stmts   Miss  Cover   Missing
+-----------------------------------------------------
+src/__init__.py             0      0   100%
+src/graph.py               86      4    95%   17, 21, 38, 85
+src/transformation.py      56      4    93%   141, 146-147, 152
+-----------------------------------------------------
+TOTAL                     142      8    94%
+Coverage HTML written to dir doc/htmlcov
+============================== 34 passed in 0.11s ==============================

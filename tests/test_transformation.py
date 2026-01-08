@@ -86,7 +86,7 @@ class TestTransformation:
             edges=[]
         )
         
-        with pytest.raises(TransformationError, match="schwarze Knoten"):
+        with pytest.raises(TransformationError, match="Schwarze Knoten müssen in beiden Seiten identisch sein."):
             Transformation(name="Invalid", left=left, right=right)
 
     def test_invalid_transformation_red_on_right(self):
