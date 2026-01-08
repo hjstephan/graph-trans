@@ -67,6 +67,10 @@ transformation = Transformation(
 new_state = apply_transformation(current_state, transformation)
 ```
 
+## Systemanalyse
+
+Analysiere mit Hilfe des [Subgraph Algorithmus](https://github.com/hjstephan/subgraph) die Stabilität oder die Ruhelage eines Systems, welches in jedem globalen Zustand durch einen Graphen beschrieben wird. Was wurde spezifiziert, was modelliert und wie verhält sich das System in der Realität wirklich? Damit lassen sich Fehler im System finden und Aussagen treffen zur Performance und Sicherheit des Systems.
+
 ## Anwendungsfälle
 
 - UML-Zustandsdiagramme
