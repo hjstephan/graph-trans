@@ -223,3 +223,226 @@ class TestGraph:
         assert 'Graph' in repr_str
         assert 'nodes=2' in repr_str
         assert 'edges=1' in repr_str
+
+
+class TestGraphSubgraphInterface:
+    """Tests für die Subgraph-Algorithmus Schnittstellen"""
+
+    def test_to_adjacency_matrix_empty_graph(self):
+        """Test: Leerer Graph zu Adjazenzmatrix"""
+        graph = Graph()
+        matrix, node_mapping = graph.to_adjacency_matrix()
+        
+        assert matrix.shape == (0, 0)
+        assert len(node_mapping) == 0
+
+    def test_to_adjacency_matrix_single_node(self):
+        """Test: Graph mit einem Knoten"""
+        graph = Graph()
+        graph.add_node(id='n1')
+        
+        matrix, node_mapping = graph.to_adjacency_matrix()
+        
+        assert matrix.shape == (1, 1)
+        assert matrix[0, 0] == 0
+        assert 'n1' in node_mapping
+        assert node_mapping['n1'] == 0
+
+    def test_to_adjacency_matrix_with_edges(self):
+        """Test: Graph mit Kanten zu Adjazenzmatrix"""
+        graph = Graph()
+        graph.add_node(id='n1')
+        graph.add_node(id='n2')
+        graph.add_node(id='n3')
+        graph.add_edge('n1', 'n2')
+        graph.add_edge('n2', 'n3')
+        
+        matrix, node_mapping = graph.to_adjacency_matrix()
+        
+        assert matrix.shape == (3, 3)
+        # Prüfe dass Kanten korrekt abgebildet sind
+        i1 = node_mapping['n1']
+        i2 = node_mapping['n2']
+        i3 = node_mapping['n3']
+        
+        assert matrix[i1, i2] == 1
+        assert matrix[i2, i3] == 1
+        assert matrix[i1, i3] == 0  # Keine direkte Kante
+
+    def test_to_adjacency_matrix_sorted_nodes(self):
+        """Test: Knoten werden sortiert in Matrix übertragen"""
+        graph = Graph()
+        graph.add_node(id='z')
+        graph.add_node(id='a')
+        graph.add_node(id='m')
+        
+        matrix, node_mapping = graph.to_adjacency_matrix()
+        
+        # Sortierte Reihenfolge sollte sein: a, m, z
+        assert node_mapping['a'] == 0
+        assert node_mapping['m'] == 1
+        assert node_mapping['z'] == 2
+
+    def test_from_adjacency_matrix_empty(self):
+        """Test: Leere Matrix zu Graph"""
+        import numpy as np
+        matrix = np.array([]).reshape(0, 0)
+        
+        graph = Graph.from_adjacency_matrix(matrix)
+        
+        assert len(graph) == 0
+        assert len(graph.get_edges()) == 0
+
+    def test_from_adjacency_matrix_with_default_ids(self):
+        """Test: Matrix zu Graph mit Standard-IDs"""
+        import numpy as np
+        matrix = np.array([
+            [0, 1, 0],
+            [0, 0, 1],
+            [0, 0, 0]
+        ])
+        
+        graph = Graph.from_adjacency_matrix(matrix)
+        
+        assert len(graph) == 3
+        assert 'n0' in graph
+        assert 'n1' in graph
+        assert 'n2' in graph
+        assert len(graph.get_edges()) == 2
+
+    def test_from_adjacency_matrix_with_custom_ids(self):
+        """Test: Matrix zu Graph mit benutzerdefinierten IDs"""
+        import numpy as np
+        matrix = np.array([
+            [0, 1],
+            [1, 0]
+        ])
+        node_ids = ['alice', 'bob']
+        
+        graph = Graph.from_adjacency_matrix(matrix, node_ids=node_ids)
+        
+        assert len(graph) == 2
+        assert 'alice' in graph
+        assert 'bob' in graph
+        
+        edges = graph.get_edges()
+        edge_pairs = {(e.from_node, e.to_node) for e in edges}
+        assert ('alice', 'bob') in edge_pairs
+        assert ('bob', 'alice') in edge_pairs
+
+    def test_from_adjacency_matrix_invalid_node_ids_length(self):
+        """Test: Falsche Anzahl von node_ids führt zu Fehler"""
+        import numpy as np
+        matrix = np.array([
+            [0, 1],
+            [0, 0]
+        ])
+        node_ids = ['only_one']
+        
+        with pytest.raises(ValueError, match="muss mit Matrixgröße"):
+            Graph.from_adjacency_matrix(matrix, node_ids=node_ids)
+
+    def test_roundtrip_graph_to_matrix_to_graph(self):
+        """Test: Graph → Matrix → Graph Roundtrip"""
+        # Original Graph erstellen
+        original = Graph()
+        original.add_node(id='a')
+        original.add_node(id='b')
+        original.add_node(id='c')
+        original.add_edge('a', 'b')
+        original.add_edge('b', 'c')
+        original.add_edge('a', 'c')
+        
+        # Zu Matrix konvertieren
+        matrix, node_mapping = original.to_adjacency_matrix()
+        
+        # Zurück zu Graph konvertieren
+        node_ids = sorted(node_mapping.keys())  # Sortiert wie in to_adjacency_matrix
+        reconstructed = Graph.from_adjacency_matrix(matrix, node_ids=node_ids)
+        
+        # Prüfe dass die Graphen äquivalent sind
+        assert len(reconstructed) == len(original)
+        assert len(reconstructed.get_edges()) == len(original.get_edges())
+        
+        # Prüfe dass alle Knoten vorhanden sind
+        for node_id in ['a', 'b', 'c']:
+            assert node_id in reconstructed
+        
+        # Prüfe dass alle Kanten vorhanden sind
+        original_edges = {(e.from_node, e.to_node) for e in original.get_edges()}
+        reconstructed_edges = {(e.from_node, e.to_node) for e in reconstructed.get_edges()}
+        assert original_edges == reconstructed_edges
+
+    def test_get_node_list_empty(self):
+        """Test: Leere Knotenliste für leeren Graph"""
+        graph = Graph()
+        node_list = graph.get_node_list()
+        
+        assert node_list == []
+
+    def test_get_node_list_sorted(self):
+        """Test: Knotenliste ist sortiert"""
+        graph = Graph()
+        graph.add_node(id='zebra')
+        graph.add_node(id='alpha')
+        graph.add_node(id='beta')
+        
+        node_list = graph.get_node_list()
+        
+        assert node_list == ['alpha', 'beta', 'zebra']
+
+    def test_get_node_list_consistency(self):
+        """Test: get_node_list ist konsistent mit to_adjacency_matrix"""
+        graph = Graph()
+        graph.add_node(id='x')
+        graph.add_node(id='y')
+        graph.add_node(id='z')
+        
+        node_list = graph.get_node_list()
+        matrix, node_mapping = graph.to_adjacency_matrix()
+        
+        # Die Reihenfolge sollte übereinstimmen
+        for idx, node_id in enumerate(node_list):
+            assert node_mapping[node_id] == idx
+
+    def test_adjacency_matrix_preserves_graph_structure(self):
+        """Test: Komplexere Graphstruktur wird korrekt konvertiert"""
+        graph = Graph()
+        # Erstelle einen kleinen gerichteten Graphen
+        for i in range(4):
+            graph.add_node(id=f'n{i}')
+        
+        graph.add_edge('n0', 'n1')
+        graph.add_edge('n0', 'n2')
+        graph.add_edge('n1', 'n3')
+        graph.add_edge('n2', 'n3')
+        
+        matrix, node_mapping = graph.to_adjacency_matrix()
+        
+        # Konvertiere zurück
+        node_ids = sorted(node_mapping.keys())
+        reconstructed = Graph.from_adjacency_matrix(matrix, node_ids=node_ids)
+        
+        # Prüfe alle Kanten
+        original_edges = set()
+        for edge in graph.get_edges():
+            original_edges.add((edge.from_node, edge.to_node))
+        
+        reconstructed_edges = set()
+        for edge in reconstructed.get_edges():
+            reconstructed_edges.add((edge.from_node, edge.to_node))
+        
+        assert original_edges == reconstructed_edges
+
+    def test_adjacency_matrix_dtype(self):
+        """Test: Adjazenzmatrix hat korrekten Datentyp"""
+        import numpy as np
+        graph = Graph()
+        graph.add_node(id='n1')
+        graph.add_node(id='n2')
+        graph.add_edge('n1', 'n2')
+        
+        matrix, _ = graph.to_adjacency_matrix()
+        
+        assert matrix.dtype == np.int_
+        assert np.all((matrix == 0) | (matrix == 1))  # Nur 0 und 1

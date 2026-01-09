@@ -5,40 +5,54 @@ rootdir: /home/stephan/Git/graph-trans
 configfile: pytest.ini
 testpaths: tests
 plugins: cov-7.0.0
-collecting ... collected 34 items
+collecting ... collected 48 items
 
 tests/test_graph.py::TestNode::test_node_creation PASSED                 [  2%]
-tests/test_graph.py::TestNode::test_node_with_attributes PASSED          [  5%]
-tests/test_graph.py::TestNode::test_node_equality PASSED                 [  8%]
-tests/test_graph.py::TestEdge::test_edge_creation PASSED                 [ 11%]
-tests/test_graph.py::TestEdge::test_edge_equality PASSED                 [ 14%]
-tests/test_graph.py::TestGraph::test_empty_graph PASSED                  [ 17%]
-tests/test_graph.py::TestGraph::test_graph_from_dicts PASSED             [ 20%]
-tests/test_graph.py::TestGraph::test_add_node PASSED                     [ 23%]
-tests/test_graph.py::TestGraph::test_add_edge PASSED                     [ 26%]
-tests/test_graph.py::TestGraph::test_add_edge_invalid_nodes PASSED       [ 29%]
-tests/test_graph.py::TestGraph::test_get_node PASSED                     [ 32%]
-tests/test_graph.py::TestGraph::test_get_nodes_by_color PASSED           [ 35%]
-tests/test_graph.py::TestGraph::test_get_edges_by_color PASSED           [ 38%]
-tests/test_graph.py::TestGraph::test_remove_node PASSED                  [ 41%]
-tests/test_graph.py::TestGraph::test_remove_nonexistent_node PASSED      [ 44%]
-tests/test_graph.py::TestGraph::test_remove_edge PASSED                  [ 47%]
-tests/test_graph.py::TestGraph::test_remove_nonexistent_edge PASSED      [ 50%]
-tests/test_graph.py::TestGraph::test_copy PASSED                         [ 52%]
-tests/test_graph.py::TestGraph::test_contains PASSED                     [ 55%]
-tests/test_graph.py::TestGraph::test_repr PASSED                         [ 58%]
-tests/test_transformation.py::TestTransformation::test_simple_transformation_creation PASSED [ 61%]
-tests/test_transformation.py::TestTransformation::test_transformation_with_creation PASSED [ 64%]
-tests/test_transformation.py::TestTransformation::test_transformation_with_deletion PASSED [ 67%]
-tests/test_transformation.py::TestTransformation::test_invalid_transformation_black_nodes_mismatch PASSED [ 70%]
-tests/test_transformation.py::TestTransformation::test_invalid_transformation_red_on_right PASSED [ 73%]
-tests/test_transformation.py::TestTransformation::test_invalid_transformation_green_on_left PASSED [ 76%]
-tests/test_transformation.py::TestTransformation::test_apply_identity_transformation PASSED [ 79%]
-tests/test_transformation.py::TestTransformation::test_apply_node_creation PASSED [ 82%]
-tests/test_transformation.py::TestTransformation::test_apply_node_deletion PASSED [ 85%]
-tests/test_transformation.py::TestTransformation::test_apply_transformation_not_applicable PASSED [ 88%]
-tests/test_transformation.py::TestTransformation::test_apply_transformation_helper_function PASSED [ 91%]
-tests/test_transformation.py::TestTransformation::test_transformation_preserves_original_graph PASSED [ 94%]
+tests/test_graph.py::TestNode::test_node_with_attributes PASSED          [  4%]
+tests/test_graph.py::TestNode::test_node_equality PASSED                 [  6%]
+tests/test_graph.py::TestEdge::test_edge_creation PASSED                 [  8%]
+tests/test_graph.py::TestEdge::test_edge_equality PASSED                 [ 10%]
+tests/test_graph.py::TestGraph::test_empty_graph PASSED                  [ 12%]
+tests/test_graph.py::TestGraph::test_graph_from_dicts PASSED             [ 14%]
+tests/test_graph.py::TestGraph::test_add_node PASSED                     [ 16%]
+tests/test_graph.py::TestGraph::test_add_edge PASSED                     [ 18%]
+tests/test_graph.py::TestGraph::test_add_edge_invalid_nodes PASSED       [ 20%]
+tests/test_graph.py::TestGraph::test_get_node PASSED                     [ 22%]
+tests/test_graph.py::TestGraph::test_get_nodes_by_color PASSED           [ 25%]
+tests/test_graph.py::TestGraph::test_get_edges_by_color PASSED           [ 27%]
+tests/test_graph.py::TestGraph::test_remove_node PASSED                  [ 29%]
+tests/test_graph.py::TestGraph::test_remove_nonexistent_node PASSED      [ 31%]
+tests/test_graph.py::TestGraph::test_remove_edge PASSED                  [ 33%]
+tests/test_graph.py::TestGraph::test_remove_nonexistent_edge PASSED      [ 35%]
+tests/test_graph.py::TestGraph::test_copy PASSED                         [ 37%]
+tests/test_graph.py::TestGraph::test_contains PASSED                     [ 39%]
+tests/test_graph.py::TestGraph::test_repr PASSED                         [ 41%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_to_adjacency_matrix_empty_graph PASSED [ 43%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_to_adjacency_matrix_single_node PASSED [ 45%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_to_adjacency_matrix_with_edges PASSED [ 47%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_to_adjacency_matrix_sorted_nodes PASSED [ 50%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_from_adjacency_matrix_empty PASSED [ 52%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_from_adjacency_matrix_with_default_ids PASSED [ 54%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_from_adjacency_matrix_with_custom_ids PASSED [ 56%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_from_adjacency_matrix_invalid_node_ids_length PASSED [ 58%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_roundtrip_graph_to_matrix_to_graph PASSED [ 60%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_get_node_list_empty PASSED [ 62%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_get_node_list_sorted PASSED [ 64%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_get_node_list_consistency PASSED [ 66%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_adjacency_matrix_preserves_graph_structure PASSED [ 68%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_adjacency_matrix_dtype PASSED [ 70%]
+tests/test_transformation.py::TestTransformation::test_simple_transformation_creation PASSED [ 72%]
+tests/test_transformation.py::TestTransformation::test_transformation_with_creation PASSED [ 75%]
+tests/test_transformation.py::TestTransformation::test_transformation_with_deletion PASSED [ 77%]
+tests/test_transformation.py::TestTransformation::test_invalid_transformation_black_nodes_mismatch PASSED [ 79%]
+tests/test_transformation.py::TestTransformation::test_invalid_transformation_red_on_right PASSED [ 81%]
+tests/test_transformation.py::TestTransformation::test_invalid_transformation_green_on_left PASSED [ 83%]
+tests/test_transformation.py::TestTransformation::test_apply_identity_transformation PASSED [ 85%]
+tests/test_transformation.py::TestTransformation::test_apply_node_creation PASSED [ 87%]
+tests/test_transformation.py::TestTransformation::test_apply_node_deletion PASSED [ 89%]
+tests/test_transformation.py::TestTransformation::test_apply_transformation_not_applicable PASSED [ 91%]
+tests/test_transformation.py::TestTransformation::test_apply_transformation_helper_function PASSED [ 93%]
+tests/test_transformation.py::TestTransformation::test_transformation_preserves_original_graph PASSED [ 95%]
 tests/test_transformation.py::TestTransformation::test_complex_transformation PASSED [ 97%]
 tests/test_transformation.py::TestTransformation::test_repr PASSED       [100%]
 
@@ -48,10 +62,10 @@ _______________ coverage: platform linux, python 3.12.3-final-0 ________________
 Name                            Stmts   Miss  Cover   Missing
 -------------------------------------------------------------
 src/__init__.py                     0      0   100%
-src/graph.py                       86      4    95%   17, 21, 38, 85
+src/graph.py                      114      4    96%   19, 23, 40, 87
 src/simulate_traffic_light.py     130    130     0%   8-226
 src/transformation.py              56      4    93%   141, 146-147, 152
 -------------------------------------------------------------
-TOTAL                             272    138    49%
+TOTAL                             300    138    54%
 Coverage HTML written to dir doc/htmlcov
-============================== 34 passed in 0.13s ==============================
+============================== 48 passed in 0.27s ==============================

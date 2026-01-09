@@ -1,9 +1,11 @@
 """
 Graph-Klasse zur Repräsentation von Graphen mit farbcodierten Knoten und Kanten.
+Erweitert um Subgraph-Algorithmus Unterstützung.
 """
 
-from typing import List, Dict, Set, Optional
+from typing import List, Dict, Set, Optional, Tuple
 from dataclasses import dataclass, field
+import numpy as np
 
 
 @dataclass
@@ -181,3 +183,76 @@ class Graph:
     def __repr__(self) -> str:
         return (f"Graph(nodes={len(self._nodes)}, "
                 f"edges={len(self._edges)})")
+
+    # ============================================================================
+    # Subgraph-Algorithmus Schnittstellen (Konvertierung)
+    # ============================================================================
+
+    def to_adjacency_matrix(self) -> Tuple[np.ndarray, Dict[str, int]]:
+        """
+        Konvertiert den Graphen in eine Adjazenzmatrix.
+        
+        Diese Methode dient als Schnittstelle zum Subgraph-Algorithmus,
+        der in subgraph.py implementiert ist.
+        
+        Returns:
+            Tuple (Adjazenzmatrix, Node-ID zu Index Mapping)
+        """
+        node_list = sorted(self._nodes.keys())  # Sortiert für Konsistenz
+        n = len(node_list)
+        node_to_idx = {node_id: idx for idx, node_id in enumerate(node_list)}
+        
+        matrix = np.zeros((n, n), dtype=int)
+        
+        for edge in self._edges:
+            i = node_to_idx[edge.from_node]
+            j = node_to_idx[edge.to_node]
+            matrix[i][j] = 1
+        
+        return matrix, node_to_idx
+
+    @staticmethod
+    def from_adjacency_matrix(matrix: np.ndarray, 
+                             node_ids: Optional[List[str]] = None) -> 'Graph':
+        """
+        Erstellt einen Graphen aus einer Adjazenzmatrix.
+        
+        Diese Methode dient als Schnittstelle vom Subgraph-Algorithmus zurück.
+        
+        Args:
+            matrix: Adjazenzmatrix (n x n)
+            node_ids: Optional - Liste von Knoten-IDs (Standard: 'n0', 'n1', ...)
+            
+        Returns:
+            Neuer Graph
+        """
+        n = matrix.shape[0]
+        if node_ids is None:
+            node_ids = [f'n{i}' for i in range(n)]
+        elif len(node_ids) != n:
+            raise ValueError(f"Anzahl der node_ids ({len(node_ids)}) muss mit Matrixgröße ({n}) übereinstimmen")
+        
+        graph = Graph()
+        
+        # Füge Knoten hinzu
+        for node_id in node_ids:
+            graph.add_node(node_id)
+        
+        # Füge Kanten hinzu
+        for i in range(n):
+            for j in range(n):
+                if matrix[i][j] == 1:
+                    graph.add_edge(node_ids[i], node_ids[j])
+        
+        return graph
+
+    def get_node_list(self) -> List[str]:
+        """
+        Gibt eine sortierte Liste aller Knoten-IDs zurück.
+        
+        Nützlich für konsistente Zuordnung zwischen Graph und Adjazenzmatrix.
+        
+        Returns:
+            Sortierte Liste von Knoten-IDs
+        """
+        return sorted(self._nodes.keys())
