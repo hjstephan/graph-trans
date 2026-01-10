@@ -68,7 +68,7 @@ transformation = Transformation(
 new_state = apply_transformation(current_state, transformation)
 ```
 
-## Simulation Ampelkreuzung (v1.1.0)
+## Ampelkreuzung Simulation (v1.1.0)
 
 Das Projekt enthält jetzt eine vollständige Beispiel-Simulation einer Ampelkreuzung, die verschiedene Zustände durchläuft:
 
@@ -120,11 +120,53 @@ g_result = Graph.from_adjacency_matrix(matrix, node_ids=list(node_mapping.keys()
 - Formale Verifikation von Systemübergängen
 - **Ampelsteuerungen und Verkehrssysteme** (siehe `simulate_traffic_light.py`)
 
+## Systemstabilitätsanalyse (v2.1.0)
+
+Ergänzt wurde die vollständige Stabilitätsanalyse von Systemtransformationen mittels Subgraph-Algorithmus:
+
+```bash
+python system_stability_analysis.py
+```
+
+Die Stabilitätsanalyse:
+- **Speichert vollständigen Transformationsverlauf**: Alle Systemzustände werden als Graphen mit Adjazenzmatrizen gespeichert
+- **Paarweiser Subgraph-Vergleich**: Jeder Zustand wird mit jedem anderen verglichen
+- **Längste Subgraph-Sequenzen**: Identifiziert monotone Erweiterungsketten im Systemverlauf
+- **Stabile Zustände (Ruhelagen)**: Erkennt Zustände ohne Veränderung
+- **Zyklen-Detektion**: Findet wiederkehrende Systemzustände
+
+**Hinweis zum Ampelsystem**: Die Analyse ist für das Ampelbeispiel trivial, da es nur wenige distinkte Systemzustände gibt (Grün, Gelb, Rot, Rot-Gelb), die zyklisch durchlaufen werden. Es handelt sich um ein einfaches deterministisches System ohne gemeinsame Subgraph-Strukturen zwischen verschiedenen Ampelphasen. Für komplexere Systeme mit vielen Komponenten und Interaktionen (z.B. verteilte Systeme, Netzwerkprotokolle, Workflow-Engines) liefert die Analyse wesentlich aussagekräftigere Ergebnisse zur Systemstabilität und potentiellen Fehlerquellen.
+
+### Eigene Systeme analysieren
+
+```python
+from system_stability_analysis import SystemSimulation
+from graph import Graph
+from transformation import Transformation
+
+# Erstelle dein System
+initial_state = Graph(...)
+transformations = [...]
+
+# Initialisiere Simulation
+sim = SystemSimulation()
+for t in transformations:
+    sim.add_transformation(t)
+
+# Führe Simulation aus
+states = sim.run(initial_state, steps=100)
+
+# Analysiere Stabilität
+analysis = sim.analyze_stability()
+sim.print_analysis(analysis)
+```
+
 ## Beispiele
 
 Das Repository enthält folgende Beispiele:
 
 - **`simulate_traffic_light.py`**: Vollständige Simulation einer Ampelkreuzung mit Zustandsübergängen
+- **`system_stability_analysis.py`**: Stabilitätsanalyse mit Subgraph-Algorithmus (demonstriert am Ampelsystem)
 
 ## Kontakt
 
