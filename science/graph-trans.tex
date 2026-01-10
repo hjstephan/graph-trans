@@ -1,0 +1,390 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\geometry{margin=2.5cm}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{beispiel}{Beispiel}
+\newtheorem{satz}{Satz}
+\newtheorem{lemma}{Lemma}
+
+% Code-Highlighting
+\lstset{
+	basicstyle=\ttfamily\small,
+	keywordstyle=\color{blue},
+	commentstyle=\color{gray},
+	stringstyle=\color{red},
+	numbers=left,
+	numberstyle=\tiny,
+	breaklines=true,
+	frame=single
+}
+
+\title{Graphtransformationen zur Systemstabilitätsanalyse}
+\author{Stephan Epp}
+\date{\today}
+
+\begin{document}
+	
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Einführung}
+
+\subsection{Problemstellung}
+
+Die Analyse komplexer Softwaresysteme erfordert Methoden zur Modellierung und Verifikation von Systemzuständen und deren Übergängen. Traditionelle Ansätze stoßen bei der Identifikation von Stabilitätszuständen, Zyklen und Ruhelagen an ihre Grenzen, insbesondere wenn Systeme durch strukturelle Transformationen beschrieben werden.
+
+Die zentrale Problemstellung dieser Arbeit ist: \textbf{Wie lassen sich Systemzustände effizient vergleichen und analysieren, um Stabilitätseigenschaften, Ruhelagen und zyklische Verhalten in transformationsbasierten Systemen zu identifizieren?}
+
+\subsection{Motivation}
+
+Graphtransformationen sind eine Methode zur Modellierung von Zustandsübergängen in Softwaresystemen. Dabei werden:
+
+\begin{itemize}
+	\item[-] Systemzustände als Graphen $G = (V, E)$ dargestellt
+	\item[-] Zustandsübergänge durch farbcodierte Transformationsregeln $L \rightarrow R$ beschrieben
+	\item[-] Kontextelemente (schwarz), zu löschende Elemente (rot) und neue Elemente (grün) unterschieden
+\end{itemize}
+
+Ein praktisches Beispiel ist die Modellierung einer Ampelkreuzung, bei der jeder Ampelzustand (Grün, Gelb, Rot, Rot-Gelb) als Graph repräsentiert wird und Übergänge zwischen den Zuständen als Transformationsregeln definiert sind.
+
+Die Systemstabilitätsanalyse ermöglicht es:
+\begin{itemize}
+	\item[-] Ruhelagen zu identifizieren (Zustände, die sich nicht mehr ändern)
+	\item[-] Zyklen zu erkennen (wiederkehrende Zustandsmuster)
+	\item[-] Längste Subgraph-Sequenzen zu finden (monotone Systemerweiterungen)
+	\item[-] Aussagen über Performance und Sicherheit zu treffen
+\end{itemize}
+
+Die Effizienz dieser Analyse hängt maßgeblich vom verwendeten Subgraph Algorithmus ab, der in $O(n^3)$ Zeit entscheiden kann, ob ein Graph in einem anderen enthalten ist.
+
+\section{Grundlagen}
+
+\subsection{Definitionen}
+
+\begin{definition}[Farbcodierter Graph]
+	Ein farbcodierter Graph ist ein Tripel $G = (V, E, c)$ mit einer Knotenmenge $V = \{v_1, v_2, \ldots, v_n\}$, einer Kantenmenge $E \subseteq V \times V$ und einer Farbfunktion $c: (V \cup E) \rightarrow \{\text{schwarz, rot, grün}\}$.
+\end{definition}
+Die Farbcodierung hat folgende Bedeutung: \textbf{Schwarz}: Kontextelemente, die unverändert bleiben, \textbf{rot}: Elemente, die gelöscht werden, \textbf{grün}: Elemente, die neu erzeugt werden.
+
+\begin{definition}[Graphtransformation]
+	Eine Graphtransformation ist eine Regel $t: L \rightarrow R$ mit:
+	\begin{itemize}
+		\item[-] Linke Seite $L$ (Vorbedingung): enthält schwarze und rote Elemente
+		\item[-] Rechte Seite $R$ (Nachbedingung): enthält schwarze und grüne Elemente
+		\item[-] Schwarze Elemente in $L$ und $R$ sind identisch
+	\end{itemize}
+\end{definition}
+
+\begin{definition}[Systemzustand]
+	Ein Systemzustand $S_i$ zum Zeitpunkt $i$ ist charakterisiert durch:
+	\begin{align*}
+		S_i = (i, t_i, G_i, T_{i-1}, A_i)
+	\end{align*}
+	wobei $i$ die Schrittnummer, $t_i$ der Zeitstempel, $G_i$ der Graph des Zustands, $T_{i-1}$ die angewendete Transformation und $A_i$ die Adjazenzmatrix von $G_i$ sind.
+\end{definition}
+
+\begin{definition}[Subgraph-Sequenz]
+	Eine Subgraph-Sequenz ist eine Folge von Systemzuständen
+	\begin{align*}
+		\text{Seq} = (S_{i}, S_{i+1}, \ldots, S_{j})
+	\end{align*}
+	mit der Eigenschaft, dass $G_k \subseteq G_{k+1}$ für alle $k \in \{i, \ldots, j-1\}$.
+\end{definition}
+
+\subsection{Graphtransformationen}
+
+\subsubsection{Anwendung einer Transformation}
+
+Die Anwendung einer Transformation $t: L \rightarrow R$ auf einen Graph $G$ erfolgt in drei Schritten:
+
+\begin{algorithm}[H]
+	\caption{Anwendung einer Graphtransformation}
+	\begin{algorithmic}[1]
+		\Require Graph $G$, Transformation $t = (L, R)$
+		\Ensure Transformierter Graph $G'$
+		\State \textbf{Schritt 1:} Prüfe ob $L$ mit $G$ übereinstimmt
+		\If{nicht übereinstimmend}
+		\State \textbf{return} Fehler
+		\EndIf
+		\State \textbf{Schritt 2:} $G' \gets \text{Kopie von } G$
+		\State \textbf{Schritt 3:} Entferne alle roten Knoten aus $L$ in $G'$
+		\State \textbf{Schritt 4:} Entferne alle roten Kanten aus $L$ in $G'$
+		\State \textbf{Schritt 5:} Füge alle grünen Knoten aus $R$ zu $G'$ hinzu
+		\State \textbf{Schritt 6:} Füge alle grünen Kanten aus $R$ zu $G'$ hinzu
+		\State \textbf{return} $G'$
+	\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Matching-Bedingung}
+
+Eine Transformation $t: L \rightarrow R$ ist auf Graph $G$ anwendbar, wenn:
+
+\begin{align}
+	\forall v \in V_L^{\text{schwarz}}: v \in V_G \\
+	\forall v \in V_L^{\text{rot}}: v \in V_G \\
+	\forall e \in E_L^{\text{schwarz}}: e \in E_G \\
+	\forall e \in E_L^{\text{rot}}: e \in E_G
+\end{align}
+
+\begin{beispiel}[Ampeltransformation: Grün $\rightarrow$ Gelb]
+	
+	\textbf{Linke Seite $L$:} Schwarze Knoten: \texttt{ampel}, \texttt{nord}, \texttt{süd}, rote Knoten: \texttt{grün}, rote Kanten: \texttt{ampel}$\rightarrow$\texttt{grün}, \texttt{grün}$\rightarrow$\texttt{nord}, \texttt{grün}$\rightarrow$\texttt{süd}. \textbf{Rechte Seite $R$:} Schwarze Knoten: \texttt{ampel}, \texttt{nord}, \texttt{süd}, grüne Knoten: \texttt{gelb}, grüne Kanten: \texttt{ampel}$\rightarrow$\texttt{gelb}, \texttt{gelb}$\rightarrow$\texttt{nord}, \texttt{gelb}$\rightarrow$\texttt{süd}.
+\end{beispiel}
+
+\section{Systemstabilitätsanalyse}
+In diesem Kapitel wird die Idee der Systemstabilitätsanalyse vorgestellt. Es werden Algorithmen zur Identifikation von Systemeigenschaften beschrieben.
+
+Die Systemstabilitätsanalyse basiert auf der Beobachtung, dass Systeme durch wiederholte Anwendung von Transformationen bestimmte Verhaltensmuster zeigen:
+
+\begin{enumerate}
+	\item \textbf{Monotone Erweiterung}: Jeder neue Zustand erweitert den vorherigen (Subgraph-Beziehung)
+	\item \textbf{Stabile Zustände}: Zustände, die sich nicht mehr ändern (Ruhelagen)
+	\item \textbf{Zyklisches Verhalten}: Zustände, die sich periodisch wiederholen
+\end{enumerate}
+
+Für eine Sequenz von $n$ Systemzuständen $S_0, S_1, \ldots, S_{n-1}$ wird eine Vergleichsmatrix $M \in \{0,1\}^{n \times n}$ berechnet:
+
+\begin{align}
+	M_{ij} = \begin{cases}
+		1 & \text{falls } G_i \subseteq G_j \\
+		0 & \text{sonst}
+	\end{cases}
+\end{align}
+Die Berechnung von $M_{ij}$ erfolgt mittels des Subgraph Algorithmus in $O(n^3)$ Zeit.
+
+\begin{satz}[Komplexität der Vergleichsmatrix]
+	Die Berechnung der vollständigen Vergleichsmatrix für $n$ Systemzustände erfordert $O(n^5)$ Zeit.
+\end{satz}
+
+\begin{proof}
+	Es sind $n^2$ Paare von Zuständen zu vergleichen. Jeder Vergleich mittels Subgraph Algorithmus benötigt $O(n^3)$ Zeit. Gesamtkomplexität: $O(n^2 \cdot n^3) = O(n^5)$.
+\end{proof}
+
+\begin{satz}[Korrektheit der Sequenzberechnung]
+	Der Algorithmus 2 findet die längste zusammenhängende Subgraph-Sequenz in $O(n^2)$ Zeit.
+\end{satz}
+
+\begin{proof}
+	Die dynamische Programmierung garantiert, dass $dp[i]$ die Länge der längsten Sequenz speichert, die bei Zustand $i$ endet. Die Rekonstruktion über die $parent$-Zeiger liefert die tatsächliche Sequenz. Die Zeitkomplexität ergibt sich aus den zwei verschachtelten Schleifen: $O(n^2)$.
+\end{proof}
+
+Die Identifikation der längsten Subgraph-Sequenz erfolgt durch dynamische Programmierung. Algorithmus 2 beschreibt die Arbeitsweise zur Ermittlung der längsten Subgraph-Sequenz.
+
+\begin{algorithm}[H]
+	\caption{Längste Subgraph-Sequenz}
+	\begin{algorithmic}[1]
+		\Require Vergleichsmatrix $M \in \{0,1\}^{n \times n}$
+		\Ensure Längste Subgraph-Sequenz
+		\State $dp[i] \gets 1$ für alle $i \in \{0, \ldots, n-1\}$
+		\State $parent[i] \gets -1$ für alle $i \in \{0, \ldots, n-1\}$
+		\For{$i = 1$ to $n-1$}
+		\For{$j = 0$ to $i-1$}
+		\If{$M[j][i] = 1$ und $j \neq i$}
+		\If{$dp[j] + 1 > dp[i]$}
+		\State $dp[i] \gets dp[j] + 1$
+		\State $parent[i] \gets j$
+		\EndIf
+		\EndIf
+		\EndFor
+		\EndFor
+		\State $max\_length \gets \max(dp)$
+		\State Rekonstruiere Sequenz über $parent$-Zeiger
+		\State \textbf{return} Sequenz
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{definition}[Ruhelage]
+Ein Zustand $S_i$ ist stabil (Ruhelage), wenn:
+\begin{align}
+	G_i = G_{i+1} \quad \text{und} \quad M[i][i+1] = 1 \quad \text{und} \quad M[i+1][i] = 1
+\end{align}
+\end{definition}
+
+Algorithmus 3 beschreibt die Arbeitsweise zur Identifikation von stabilen Zuständen.
+\begin{algorithm}[H]
+	\caption{Identifikation stabiler Zustände}
+	\begin{algorithmic}[1]
+		\Require Vergleichsmatrix $M$, Systemzustände $\{S_0, \ldots, S_{n-1}\}$
+		\Ensure Menge stabiler Zustände
+		\State $stable \gets \emptyset$
+		\For{$i = 0$ to $n-2$}
+		\If{$M[i][i+1] = 1$ und $M[i+1][i] = 1$}
+		\If{$A_i = A_{i+1}$} \Comment{Adjazenzmatrizen sind identisch}
+		\State $stable \gets stable \cup \{i\}$
+		\EndIf
+		\EndIf
+		\EndFor
+		\State \textbf{return} $stable$
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{definition}[Zyklus]
+Ein Zyklus liegt vor, wenn ein Zustand $S_i$ zu einem späteren Zeitpunkt $S_j$ ($j > i$) identisch wiederkehrt:
+
+\begin{align}
+	\text{Zyklus}(i, j) \Leftrightarrow G_i = G_j \quad \text{für } j > i
+\end{align}
+Die Zykluslänge ist $l = j - i$.
+\end{definition}
+Algorithmus 4 beschreibt die Arbeitsweise zur Identifikation von Zyklen im System.
+
+\begin{algorithm}[H]
+	\caption{Identifikation von Zyklen}
+	\begin{algorithmic}[1]
+		\Require Systemzustände $\{S_0, \ldots, S_{n-1}\}$
+		\Ensure Menge von Zyklen $(i, j)$
+		\State $cycles \gets \emptyset$
+		\For{$i = 0$ to $n-2$}
+		\For{$j = i+1$ to $n-1$}
+		\If{$A_i = A_j$} \Comment{Adjazenzmatrizen sind identisch}
+		\State $cycles \gets cycles \cup \{(i, j)\}$
+		\EndIf
+		\EndFor
+		\EndFor
+		\State \textbf{return} $cycles$
+	\end{algorithmic}
+\end{algorithm}
+
+\section{Subgraph Algorithmus}
+\label{sec:sa}
+
+In diesem Kapitel wird auf den Subgraph Algorithmus eingegangen und verdeutlicht, wie dieser Algorithmus bei der Systemstabilitätsanalyse eingesetzt wird. 
+
+Der Subgraph Algorithmus ist das zentrale Element der Systemstabilitätsanalyse. Er entscheidet in einer Laufzeit von $O(n^3)$, ob eine Subgraph-Beziehung $G_i \subseteq G_j$ existiert. Die Analyse der Effizienz hängt direkt von der Effizienz des Subgraph Algorithmus ab:
+\begin{itemize}
+	\item[-] \textbf{Vergleichsmatrix}: Die Ermittlung der Vergleichsmatrix erfordert $O(n^2)$ Aufrufe des Subgraph Algorithmus.
+	\item[-] \textbf{Gesamtlaufzeit}: Der Subgraph Algorithmus hat eine Laufzeit von $O(n^3)$, damit ergibt sich eine Gesamtlaufzeit von $O(n^5)$.
+\end{itemize}
+Um den Subgraph Algorithmus zu nutzen, müssen die erforderlichen Datenstrukturen für die Anwendung des Subgraph Algorithmus bereit gestellt werden. Die Graphklasse bietet Methoden zur Konvertierung zwischen Graph-Repräsentation und Adjazenzmatrix:
+
+\begin{lstlisting}[language=Python, caption=Graph-Adjazenzmatrix Konvertierung]
+def to_adjacency_matrix(self) -> Tuple[np.ndarray, Dict[str, int]]:
+	"""Konvertiert Graph in Adjazenzmatrix."""
+	node_list = sorted(self._nodes.keys())
+	n = len(node_list)
+	node_to_idx = {node_id: idx for idx, node_id in enumerate(node_list)}
+	
+	matrix = np.zeros((n, n), dtype=int)
+	for edge in self._edges:
+		i = node_to_idx[edge.from_node]
+		j = node_to_idx[edge.to_node]
+		matrix[i][j] = 1
+	
+	return matrix, node_to_idx
+\end{lstlisting}
+
+\section{Algorithmus}
+
+In diesem Kapitel wird der Algorithmus zur Systemstabilitätsanalyse beschrieben.
+
+\subsection{Arbeitsweise}
+
+Es folgt der vollständige Algorithmus zur Systemstabilitätsanalyse.
+
+\begin{algorithm}[H]
+	\caption{Systemstabilitätsanalyse}
+	\begin{algorithmic}[1]
+		\Require Anfangszustand $G_0$, Transformationen $\{t_1, \ldots, t_m\}$, Schritte $k$
+		\Ensure Analyseergebnisse
+		\State $states \gets [S_0]$ mit $S_0 = (0, \text{now}(), G_0, \text{null}, A_0)$
+		\For{$i = 1$ to $k$}
+		\State $t \gets t_{((i-1) \mod m) + 1}$ \Comment{Zyklische Transformation}
+		\State $G_i \gets t.\text{apply}(G_{i-1})$
+		\State $S_i \gets (i, \text{now}(), G_i, t, A_i)$
+		\State $states \gets states \cup \{S_i\}$
+		\EndFor
+		\State
+		\State $M \gets \text{Matrix}(|states| \times |states|)$
+		\For{$i = 0$ to $|states|-1$}
+		\For{$j = 0$ to $|states|-1$}
+		\If{$i = j$}
+		\State $M[i][j] \gets 1$
+		\Else
+		\State $M[i][j] \gets \text{Subgraph}(A_i, A_j)$
+		\EndIf
+		\EndFor
+		\EndFor
+		\State
+		\State $sequences \gets \text{FindLongestSequences}(M)$
+		\State $stable \gets \text{FindStableStates}(M, states)$
+		\State $cycles \gets \text{FindCycles}(states)$
+		\State
+		\State \textbf{return} $(M, sequences, stable, cycles)$
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{satz}[Laufzeit]
+	Die Systemstabilitätsanalyse für Transformationsschritte mit Graphen der Größe $n$ hat eine Laufzeit von $O(n^5)$, die von der Anzahl der Transformationsschritte abhängt.
+\end{satz}
+
+\begin{proof}
+	Der Beweis geht direkt aus der Analyse der Effizienz aus Kapitel \ref{sec:sa} hervor.
+\end{proof}
+
+\section{Zusammenfassung}
+
+Die vorliegende Arbeit beschreibt die formale Methode zur Modellierung von Systemzuständen durch farbcodierte Graphen. Außerdem beschreibt sie einen effizienten Algorithmus zur Systemstabilitätsanalyse basierend auf dem Subgraph Algorithmus.
+
+\subsection{Ausblick}
+
+Für die Weiterentwicklung der Systemstabilitätsanalyse durch Graphtransformationen ergeben sich vielfältige Forschungsrichtungen, die sich in drei Bereiche gliedern lassen: Optimierungen des bestehenden Algorithmus, konzeptionelle Erweiterungen sowie neue Anwendungsgebiete.
+
+\subsubsection{Optimierungen}
+
+Im Bereich der Optimierungen bietet die Parallelisierung der Vergleichsmatrix-Berechnung erhebliches Potenzial. Da die einzelnen Subgraph-Vergleiche voneinander unabhängig sind, können sie problemlos auf mehrere Prozessorkerne verteilt werden. Dies würde bei modernen Multi-Core-Systemen eine nahezu lineare Beschleunigung ermöglichen und die Gesamtlaufzeit deutlich reduzieren.
+
+Ein weiterer vielversprechender Ansatz ist die inkrementelle Analyse. Anstatt bei jedem neuen Systemzustand die gesamte Vergleichsmatrix neu zu berechnen, könnten nur die Vergleiche des neuen Zustands mit allen bestehenden Zuständen durchgeführt werden. Dies würde die Laufzeit für jeden zusätzlichen Schritt reduzieren und die Analyse von langfristigen Systemverläufen erheblich beschleunigen.
+
+Für sehr große Systeme mit mehr als tausend Zuständen könnten approximative Verfahren eingesetzt werden. Diese würden einen bewussten Trade-off zwischen Genauigkeit und Laufzeit eingehen, indem sie beispielsweise nur eine Stichprobe von Zuständen vergleichen oder heuristische Abbruchkriterien verwenden. Dadurch ließe sich die Analyse auch auf Systeme anwenden, für die eine vollständige Berechnung zu zeitaufwändig wäre.
+
+\subsubsection{Erweiterungen}
+
+Konzeptionell eröffnen sich zahlreiche Erweiterungsmöglichkeiten des Grundansatzes. Die Integration gewichteter Graphen würde es ermöglichen, quantitative Eigenschaften von Systemzuständen zu modellieren. Kantengewichte könnten beispielsweise Wahrscheinlichkeiten, Kosten oder Kapazitäten repräsentieren. Der Subgraph Algorithmus müsste entsprechend erweitert werden, um nicht nur strukturelle Gleichheit, sondern auch die Verträglichkeit von Gewichten zu prüfen.
+
+Attributierte Graphen stellen eine weitere wichtige Erweiterung dar. Dabei würden Knoten und Kanten mit Attributen versehen, die bei den Vergleichen berücksichtigt werden müssen. Dies ist besonders relevant für die Modellierung realer Systeme, bei denen Objekte durch vielfältige Eigenschaften charakterisiert sind. Der Vergleichsalgorithmus müsste dann sowohl strukturelle als auch attributbasierte Übereinstimmungen prüfen.
+
+Probabilistische Transformationen würden die Modellierung nicht-deterministischer Systeme ermöglichen. Anstatt deterministischer Regeln könnten Transformationen mit Wahrscheinlichkeiten versehen werden, was die Analyse stochastischer Systeme erlaubt. Die Stabilitätsanalyse müsste dann um statistische Methoden erweitert werden, um Aussagen über die erwartete Systemdynamik treffen zu können.
+
+Die Unterstützung hierarchischer Graphen würde Systeme mit mehreren Abstraktionsebenen zugänglich machen. Knoten könnten selbst wieder Graphen repräsentieren, was die Modellierung komplexer Systemarchitekturen erheblich vereinfachen würde. Der Subgraph Algorithmus müsste rekursiv auf verschiedenen Hierarchieebenen operieren können.
+
+Schließlich wäre die Integration von Echtzeitaspekten für viele praktische Anwendungen essentiell. Durch die Berücksichtigung von Zeitbedingungen und Deadlines bei Transformationen könnten zeitkritische Systeme analysiert werden. Die Stabilitätsanalyse müsste dann auch temporale Eigenschaften wie maximale Antwortzeiten oder Periodizität untersuchen.
+
+\subsubsection{Anwendungsgebiete}
+
+Die entwickelte Methodik eröffnet vielfältige neue Anwendungsgebiete. Im Bereich der Cyber-Physical Systems könnten eingebettete Systeme und IoT-Anwendungen analysiert werden. Die Wechselwirkung zwischen physikalischen Prozessen und Software-Steuerung ließe sich durch Graphtransformationen elegant modellieren, wobei die Stabilitätsanalyse kritische Systemzustände identifizieren könnte.
+
+Ein besonders aktuelles Anwendungsfeld ist die Blockchain-Technologie. Die Verifikation von Smart Contract Zustandsübergängen stellt eine große Herausforderung dar, da Fehler in Contracts zu erheblichen finanziellen Verlusten führen können. Durch Modellierung der Contract-Zustände als Graphen und der Transaktionen als Transformationen könnte die Stabilitätsanalyse unerwünschte Zustände oder Endlosschleifen frühzeitig erkennen.
+
+In der Systembiologie würde die Modellierung von Gen-Regulationsnetzwerken profitieren. Gene und ihre Interaktionen lassen sich natürlich als Graphen darstellen, während Regulationsprozesse durch Transformationen beschrieben werden können. Die Stabilitäts-analyse könnte helfen, stabile Expressionsmuster oder oszillierende Genaktivitäten zu identifizieren.
+
+Schließlich bieten soziale Netzwerke ein interessantes Anwendungsgebiet für die Analyse von Netzwerkdynamiken und Informationsfluss. Die Evolution sozialer Strukturen durch das Hinzufügen oder Entfernen von Verbindungen ließe sich als Folge von Graphtransformationen modellieren. Die Stabilitätsanalyse könnte stabile Communities identifizieren oder die Ausbreitung von Informationen durch das Netzwerk verfolgen.
+
+\subsection{Fazit}
+
+Die Kombination von Graphtransformationen und dem Subgraph Algorithmus bietet eine leistungsfähige Methode zur Systemstabilitätsanalyse. Die Effizienz des Ansatzes ermöglicht die Analyse realistischer Systeme, während die formale Fundierung korrekte und nachvollziehbare Ergebnisse garantiert.
+
+Die praktische Anwendbarkeit wird durch die Implementierung in Python und einem Beispiel einer Ampelkreuzung demonstriert. Die Analyse liefert wertvolle Einblicke in Systemverhalten, Stabilitätseigenschaften und potenzielle Fehlerquellen.
+
+Der Subgraph Algorithmus ist dabei das zentrale Element, das durch seine Effizienz und Korrektheit die gesamte Analyse erst praktikabel macht. Ohne diese effiziente Subgraph-Erkennung wäre die paarweise Vergleichsmatrix-Berechnung für realistische Systemgrößen nicht durchführbar.
+
+\subsection{Implementierung}
+
+Der Python Code für die Implementierung  den Algorithmus der Systemstabilitätsanalyse und die Tests wurden mit Claude AI generiert. Der Code ist verfügbar unter: \url{https://github.com/hjstephan/graph-trans}. In diesem Repository befindet sich auch der generierte Code Coverage Report im HTML Format.
+
+\end{document}
