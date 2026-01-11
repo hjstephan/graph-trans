@@ -80,7 +80,7 @@ Die Effizienz dieser Analyse hängt maßgeblich vom verwendeten Subgraph Algorit
 \begin{definition}[Farbcodierter Graph]
 	Ein farbcodierter Graph ist ein Tripel $G = (V, E, c)$ mit einer Knotenmenge $V = \{v_1, v_2, \ldots, v_n\}$, einer Kantenmenge $E \subseteq V \times V$ und einer Farbfunktion $c: (V \cup E) \rightarrow \{\text{schwarz, rot, grün}\}$.
 \end{definition}
-Die Farbcodierung hat folgende Bedeutung: \textbf{Schwarz}: Kontextelemente, die unverändert bleiben, \textbf{rot}: Elemente, die gelöscht werden, \textbf{grün}: Elemente, die neu erzeugt werden.
+Die Farbcodierung hat folgende Bedeutung: \textbf{Schwarz}: Kontextelemente, die unver-ändert bleiben, \textbf{rot}: Elemente, die gelöscht werden, \textbf{grün}: Elemente, die neu erzeugt werden.
 
 \begin{definition}[Graphtransformation]
 	Eine Graphtransformation ist eine Regel $t: L \rightarrow R$ mit:
@@ -289,7 +289,7 @@ def to_adjacency_matrix(self) -> Tuple[np.ndarray, Dict[str, int]]:
 	return matrix, node_to_idx
 \end{lstlisting}
 
-\section{Algorithmus}
+\section{Algorithmus zur Systemstabilitätsanalyse}
 
 In diesem Kapitel wird der Algorithmus zur Systemstabilitätsanalyse beschrieben.
 
@@ -337,23 +337,372 @@ Es folgt der vollständige Algorithmus zur Systemstabilitätsanalyse.
 	Der Beweis geht direkt aus der Analyse der Effizienz aus Kapitel \ref{sec:sa} hervor.
 \end{proof}
 
+\section{Stabilitätsanalyse von Markov-Ketten}
+
+In diesem Kapitel wird gezeigt, wie die entwickelte Methodik zur Systemstabilitätsanalyse auf Markov-Ketten angewendet werden kann. Markov-Ketten sind stochastische Prozesse, die sich natürlich durch Graphen darstellen lassen, wobei Zustände als Knoten und Übergangswahrscheinlichkeiten als gewichtete Kanten repräsentiert werden.
+
+\subsection{Grundlagen der Markov-Ketten}
+
+\begin{definition}[Markov-Kette]
+	Eine zeitdiskrete Markov-Kette ist ein stochastischer Prozess $(X_t)_{t \geq 0}$ mit endlichem Zustandsraum $S = \{s_1, s_2, \ldots, s_n\}$ und der Markov-Eigenschaft:
+	\begin{align}
+		P(X_{t+1} = s_j \mid X_t = s_i, X_{t-1}, \ldots, X_0) = P(X_{t+1} = s_j \mid X_t = s_i) = p_{ij}
+	\end{align}
+	wobei $p_{ij}$ die Übergangswahrscheinlichkeit von Zustand $s_i$ nach $s_j$ ist.
+\end{definition}
+
+\begin{definition}[Übergangsmatrix]
+	Die Übergangsmatrix $P = (p_{ij})$ einer Markov-Kette ist eine stochastische Matrix mit:
+	\begin{align}
+		p_{ij} \geq 0 \quad \text{und} \quad \sum_{j=1}^{n} p_{ij} = 1 \quad \text{für alle } i
+	\end{align}
+\end{definition}
+
+\begin{definition}[Stationäre Verteilung]
+	Eine Wahrscheinlichkeitsverteilung $\pi = (\pi_1, \ldots, \pi_n)$ heißt stationäre Verteilung, wenn:
+	\begin{align}
+		\pi^T = \pi^T P \quad \text{und} \quad \sum_{i=1}^{n} \pi_i = 1
+	\end{align}
+\end{definition}
+
+\subsection{Graphrepräsentation von Markov-Ketten}
+
+Eine Markov-Kette lässt sich als gewichteter gerichteter Graph $G_{MC} = (V, E, w)$ darstellen:
+
+\begin{itemize}
+	\item[-] Knoten $V = S$ repräsentieren die Zustände
+	\item[-] Kante $(s_i, s_j) \in E$ existiert genau dann, wenn $p_{ij} > 0$
+	\item[-] Gewichtsfunktion $w: E \rightarrow (0, 1]$ mit $w((s_i, s_j)) = p_{ij}$
+\end{itemize}
+
+Die Adjazenzmatrix $A$ des Graphen entspricht der binären Version der Übergangsmatrix:
+\begin{align}
+	A_{ij} = \begin{cases}
+		1 & \text{falls } p_{ij} > 0 \\
+		0 & \text{sonst}
+	\end{cases}
+\end{align}
+
+\subsection{Transformation von Markov-Ketten}
+
+Änderungen in Markov-Ketten können als Graphtransformationen modelliert werden. Typische Transformationen umfassen:
+
+\begin{enumerate}
+	\item \textbf{Hinzufügen neuer Übergänge}: Neue Kanten mit Wahrscheinlichkeiten $> 0$ werden eingefügt (grüne Kanten), bestehende Wahrscheinlichkeiten werden renormalisiert
+	
+	\item \textbf{Entfernen von Übergängen}: Kanten werden gelöscht (rote Kanten), Wahrscheinlichkeiten werden auf verbleibende Übergänge umverteilt
+	
+	\item \textbf{Zustandsaggregation}: Mehrere Zustände werden zu einem einzigen Zustand zusammengefasst
+	
+	\item \textbf{Zustandsverfeinerung}: Ein Zustand wird in mehrere Unterzustände aufgeteilt
+\end{enumerate}
+
+\begin{beispiel}[Transformation einer Drei-Zustands-Markov-Kette]
+	Betrachte eine Markov-Kette mit Zuständen $\{A, B, C\}$ und Übergangsmatrix:
+	\begin{align*}
+		P = \begin{pmatrix}
+			0.7 & 0.3 & 0 \\
+			0.2 & 0.5 & 0.3 \\
+			0.1 & 0.4 & 0.5
+		\end{pmatrix}
+	\end{align*}
+	
+	\textbf{Transformation}: Hinzufügen eines Übergangs $A \rightarrow C$ mit Wahrscheinlichkeit 0.1
+	
+	\textbf{Linke Seite $L$}: Schwarze Knoten: $A, B, C$; bestehende Kanten wie in $P$
+	
+	\textbf{Rechte Seite $R$}: Schwarze Knoten: $A, B, C$; grüne Kante: $A \rightarrow C$ mit Gewicht 0.1
+	
+	Nach Renormalisierung:
+	\begin{align*}
+		P' = \begin{pmatrix}
+			0.64 & 0.26 & 0.1 \\
+			0.2 & 0.5 & 0.3 \\
+			0.1 & 0.4 & 0.5
+		\end{pmatrix}
+	\end{align*}
+\end{beispiel}
+
+\subsection{Stabilitätskriterien für Markov-Ketten}
+
+Die Stabilitätsanalyse von Markov-Ketten untersucht folgende Eigenschaften:
+
+\subsubsection{Irreduzibilität}
+
+\begin{definition}[Irreduzibilität]
+	Eine Markov-Kette heißt irreduzibel, wenn jeder Zu-stand von jedem anderen Zustand aus erreichbar ist. Graphtheoretisch bedeutet dies, dass der zugehörige Graph stark zusammenhängend ist.
+\end{definition}
+
+Die Irreduzibilität lässt sich durch Analyse der Adjazenzmatrix prüfen. Nach Anwendung von Transformationen kann die Irreduzibilität verloren gehen oder wiederhergestellt werden.
+
+\begin{algorithm}[H]
+	\caption{Prüfung der Irreduzibilität}
+	\begin{algorithmic}[1]
+		\Require Adjazenzmatrix $A \in \{0,1\}^{n \times n}$
+		\Ensure Boolean: Kette ist irreduzibel
+		\State Berechne Erreichbarkeitsmatrix $R = A + A^2 + \cdots + A^n$
+		\If{alle Einträge $R_{ij} > 0$}
+		\State \textbf{return} true \Comment{Alle Zustände erreichbar}
+		\Else
+		\State \textbf{return} false \Comment{Nicht irreduzibel}
+		\EndIf
+	\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Periodizität}
+
+\begin{definition}[Periode]
+	Die Periode eines Zustands $s_i$ ist:
+	\begin{align}
+		d(i) = \gcd\{n \geq 1 : P_{ii}^{(n)} > 0\}
+	\end{align}
+	wobei $P^{(n)}$ die $n$-Schritt-Übergangsmatrix ist. Ein Zustand mit $d(i) = 1$ heißt aperiodisch.
+\end{definition}
+
+Eine Markov-Kette ist aperiodisch, wenn alle Zustände aperiodisch sind. Dies ist äquivalent dazu, dass der zugehörige Graph Selbstschleifen hat oder keine bipartite Struktur aufweist.
+
+\subsubsection{Ergodizität}
+
+\begin{definition}[Ergodizität]
+	Eine Markov-Kette heißt ergodisch, wenn sie irreduzibel und aperiodisch ist.
+\end{definition}
+
+Ergodische Markov-Ketten haben eine eindeutige stationäre Verteilung $\pi$, gegen die die Kette unabhängig vom Startzustand konvergiert:
+\begin{align}
+	\lim_{n \rightarrow \infty} P^{(n)} = \begin{pmatrix}
+		\pi^T \\
+		\vdots \\
+		\pi^T
+	\end{pmatrix}
+\end{align}
+
+\subsection{Analyse von Transformationssequenzen}
+
+Betrachte eine Sequenz von Markov-Ketten $MC_0, MC_1, \ldots, MC_k$, die durch Transformationen $t_1, \ldots, t_k$ auseinander hervorgehen:
+\begin{align}
+	MC_0 \xrightarrow{t_1} MC_1 \xrightarrow{t_2} \cdots \xrightarrow{t_k} MC_k
+\end{align}
+
+Die Systemstabilitätsanalyse kann folgende Fragen beantworten:
+
+\begin{enumerate}
+	\item \textbf{Erhaltung der Irreduzibilität}: Bleibt die Kette nach Transformationen irreduzibel?
+	
+	\item \textbf{Konvergenz zur Ergodizität}: Führen die Transformationen zu einer ergodischen Kette?
+	
+	\item \textbf{Stabilität der stationären Verteilung}: Wie stark ändert sich $\pi$ unter Transformationen?
+	
+	\item \textbf{Strukturelle Stabilität}: Welche Subgraph-Beziehungen existieren zwischen den Zustandsgraphen?
+\end{enumerate}
+
+\subsection{Anwendung des Subgraph Algorithmus}
+
+Der Subgraph Algorithmus wird auf die Adjazenzmatrizen der Markov-Ketten angewendet. Für zwei Markov-Ketten $MC_i$ und $MC_j$ mit Adjazenzmatrizen $A_i$ und $A_j$ gilt:
+
+\begin{align}
+	A_i \subseteq A_j \quad \Leftrightarrow \quad \text{Jeder Übergang in } MC_i \text{ existiert auch in } MC_j
+\end{align}
+
+Dies bedeutet: Wenn $A_i \subseteq A_j$, dann hat $MC_j$ mindestens alle Übergänge von $MC_i$ (möglicherweise mit unterschiedlichen Wahrscheinlichkeiten).
+
+\begin{satz}[Monotone Erweiterung der Erreichbarkeit]
+	Sei $(MC_0, MC_1, \ldots, MC_k)$ eine Sub-graph-Sequenz mit $A_i \subseteq A_{i+1}$ für alle $i$. Dann gilt:
+	\begin{enumerate}
+		\item Wenn $MC_0$ irreduzibel ist, dann sind alle $MC_i$ irreduzibel
+		\item Die Menge der erreichbaren Zustände ist monoton nicht-abnehmend
+	\end{enumerate}
+\end{satz}
+
+\begin{proof}
+	Wenn $A_i \subseteq A_{i+1}$, dann enthält $MC_{i+1}$ alle Kanten von $MC_i$ und möglicherweise weitere. Daher bleibt die Erreichbarkeit zwischen Zuständen erhalten oder wird erweitert. Wenn $MC_0$ stark zusammenhängend ist, bleibt dies in allen nachfolgenden Ketten erhalten.
+\end{proof}
+
+\subsection{Berechnung der Vergleichsmatrix für Markov-Ketten}
+
+Für eine Sequenz von $k$ Markov-Ketten wird die Vergleichsmatrix $M \in \{0,1\}^{k \times k}$ analog zur allgemeinen Systemstabilitätsanalyse berechnet:
+
+\begin{align}
+	M_{ij} = \begin{cases}
+		1 & \text{falls } A_i \subseteq A_j \\
+		0 & \text{sonst}
+	\end{cases}
+\end{align}
+
+Zusätzlich können gewichtsspezifische Vergleiche durchgeführt werden:
+
+\begin{definition}[Gewichtete Subgraph-Beziehung]
+	Eine Markov-Kette $MC_i$ mit Über-gangsmatrix $P_i$ ist ein gewichteter Subgraph von $MC_j$ mit Übergangsmatrix $P_j$, geschrieben $MC_i \subseteq_w MC_j$, wenn:
+	\begin{align}
+		A_i \subseteq A_j \quad \text{und} \quad p_{ij}^{(i)} \leq p_{ij}^{(j)} \quad \text{für alle } (s_i, s_j) \in E_i
+	\end{align}
+\end{definition}
+
+\subsection{Beispiel: Wetter-Markov-Kette}
+
+\begin{beispiel}[Evolution einer Wetter-Markov-Kette]
+	Betrachte ein einfaches Wettermodell mit Zuständen $\{$sonnig, bewölkt, regnerisch$\}$.
+	
+	\textbf{Anfangszustand $MC_0$}:
+	\begin{align*}
+		P_0 = \begin{pmatrix}
+			0.7 & 0.3 & 0 \\
+			0.4 & 0.4 & 0.2 \\
+			0 & 0.5 & 0.5
+		\end{pmatrix}, \quad
+		A_0 = \begin{pmatrix}
+			1 & 1 & 0 \\
+			1 & 1 & 1 \\
+			0 & 1 & 1
+		\end{pmatrix}
+	\end{align*}
+	
+	\textbf{Transformation 1}: Hinzufügen direkter Übergang sonnig $\rightarrow$ regnerisch
+	\begin{align*}
+		P_1 = \begin{pmatrix}
+			0.65 & 0.25 & 0.1 \\
+			0.4 & 0.4 & 0.2 \\
+			0 & 0.5 & 0.5
+		\end{pmatrix}, \quad
+		A_1 = \begin{pmatrix}
+			1 & 1 & 1 \\
+			1 & 1 & 1 \\
+			0 & 1 & 1
+		\end{pmatrix}
+	\end{align*}
+	
+	\textbf{Transformation 2}: Hinzufügen Übergang regnerisch $\rightarrow$ sonnig
+	\begin{align*}
+		P_2 = \begin{pmatrix}
+			0.65 & 0.25 & 0.1 \\
+			0.4 & 0.4 & 0.2 \\
+			0.2 & 0.4 & 0.4
+		\end{pmatrix}, \quad
+		A_2 = \begin{pmatrix}
+			1 & 1 & 1 \\
+			1 & 1 & 1 \\
+			1 & 1 & 1
+		\end{pmatrix}
+	\end{align*}
+	
+	\textbf{Analyse}:
+	\begin{itemize}
+		\item[-] Subgraph-Sequenz: $A_0 \subseteq A_1 \subseteq A_2$
+		\item[-] $MC_0$ ist nicht irreduzibel (sonnig und bewölkt können nicht nach regnerisch über-gehen direkt)
+		\item[-] $MC_1$ ist nicht irreduzibel (regnerisch kann nicht nach sonnig übergehen)
+		\item[-] $MC_2$ ist irreduzibel und aperiodisch (vollständig verbunden mit Selbstschleifen) $\Rightarrow$ ergodisch
+	\end{itemize}
+	
+	Die Vergleichsmatrix:
+	\begin{align*}
+		M = \begin{pmatrix}
+			1 & 1 & 1 \\
+			0 & 1 & 1 \\
+			0 & 0 & 1
+		\end{pmatrix}
+	\end{align*}
+	
+	Dies zeigt eine monotone Erweiterung: Jeder Zustand ist Subgraph aller nachfolgenden Zustände.
+\end{beispiel}
+
+\subsection{Stabilität stationärer Verteilungen}
+
+Ein wichtiger Aspekt bei der Transformation von Markov-Ketten ist die Veränderung der stationären Verteilung. Für ergodische Ketten kann die Sensitivität von $\pi$ bezüglich Transformationen analysiert werden.
+
+\begin{definition}[Stabilität der stationären Verteilung]
+	Die stationäre Verteilung heißt $\epsilon$-stabil unter Transformation $t$, wenn:
+	\begin{align}
+		\|\pi_{nach} - \pi_{vor}\|_1 \leq \epsilon
+	\end{align}
+	wobei $\|\cdot\|_1$ die $L^1$-Norm bezeichnet.
+\end{definition}
+
+\begin{algorithm}[H]
+	\caption{Berechnung der Stabilitätsmetrik}
+	\begin{algorithmic}[1]
+		\Require Sequenz von Übergangsmatrizen $\{P_0, P_1, \ldots, P_k\}$
+		\Ensure Stabilitätsmetriken
+		\State $stability \gets []$
+		\For{$i = 0$ to $k$}
+		\State Berechne stationäre Verteilung $\pi_i$ aus $P_i$
+		\If{$i > 0$}
+		\State $\Delta_i \gets \|\pi_i - \pi_{i-1}\|_1$
+		\State $stability.\text{append}(\Delta_i)$
+		\EndIf
+		\EndFor
+		\State \textbf{return} $stability$
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Zusammenfassung}
+
+Die Systemstabilitätsanalyse lässt sich erfolgreich auf Markov-Ketten anwenden. Die Graphrepräsentation ermöglicht es, den Subgraph Algorithmus zur Analyse struktureller Veränderungen einzusetzen. Wichtige Erkenntnisse sind:
+
+\begin{itemize}
+	\item[-] Transformationen können als farbcodierte Graphregeln modelliert werden
+	\item[-] Der Subgraph Algorithmus identifiziert monotone Erweiterungen der Übergangs-möglichkeiten
+	\item[-] Irreduzibilität und Ergodizität können durch Transformationen erreicht oder verloren werden
+	\item[-] Die Analyse von Transformationssequenzen zeigt die Evolution stochastischer Systeme
+\end{itemize}
+
+Die Kombination von Markov-Theorie und Graphtransformationen eröffnet neue Mög-lichkeiten für die Analyse stochastischer Systeme, insbesondere im Bereich der Perfor-mance-Modellierung, Zuverlässigkeitsanalyse und adaptiven Systeme.
+
 \section{Zusammenfassung}
 
-Die vorliegende Arbeit beschreibt die formale Methode zur Modellierung von Systemzuständen durch farbcodierte Graphen. Außerdem beschreibt sie einen effizienten Algorithmus zur Systemstabilitätsanalyse basierend auf dem Subgraph Algorithmus.
+Die vorliegende Arbeit präsentiert eine umfassende Methodik zur Systemstabilitätsanalyse durch Graphtransformationen. Im Zentrum steht die Verbindung von formaler Graphtheorie, effizienten Algorithmen und praktischer Anwendbarkeit auf unterschiedliche Systemtypen.
+
+\subsection{Kernbeiträge}
+
+Die wesentlichen Beiträge dieser Arbeit lassen sich in vier Bereiche gliedern:
+
+\textbf{Formale Grundlagen}: Es wurde eine formale Basis für die Modellierung von Systemzuständen durch farbcodierte Graphen entwickelt. Die Farbcodierung (schwarz für Kontextelemente, rot für zu löschende Elemente, grün für neu zu erzeugende Elemente) ermöglicht eine intuitive und gleichzeitig präzise Beschreibung von Zustandsübergängen. Die Definition von Transformationsregeln als Paare $L \rightarrow R$ folgt etablierten Konzepten der algebraischen Graphtransformation und bietet eine solide theoretische Fundierung.
+
+\textbf{Effizienter Algorithmus}: Die entwickelte Systemstabilitätsanalyse basiert maßgeblich auf dem Subgraph Algorithmus, der in $O(n^3)$ Zeit entscheiden kann, ob eine Subgraph-Beziehung zwischen zwei Graphen existiert. Diese Effizienz ist entscheidend für die praktische Anwendbarkeit, da für eine Sequenz von $k$ Systemzuständen insgesamt $O(k^2 \cdot n^3) = O(n^5)$ Laufzeit erreicht wird. Ohne den effizienten Subgraph Algorithmus wäre die Analyse realistischer Systeme mit naiven Ansätzen ($O(n!)$ für Permutationsprüfung) nicht durchführbar.
+
+\textbf{Umfassende Analysemöglichkeiten}: Die Methodik ermöglicht die Identifikation verschiedener Systemeigenschaften. Durch die Berechnung der Vergleichsmatrix $M$ können längste Subgraph-Sequenzen identifiziert werden, die monotone Systemerweiterungen repräsentieren. Die Erkennung stabiler Zustände (Ruhelagen) erfolgt durch Prüfung auf identische aufeinanderfolgende Systemzustände. Zyklen werden durch paarweisen Vergleich aller Zustände in der Sequenz erkannt. Diese drei Analysetypen liefern komplementäre Einblicke in das Systemverhalten.
+
+\textbf{Anwendung auf Markov-Ketten}: Die Erweiterung der Methodik auf Markov-Ketten demonstriert die Vielseitigkeit des Ansatzes. Durch Interpretation von Übergangs-wahrscheinlichkeiten als Kantengewichte und Verwendung der binären Adjazenzmatrix für strukturelle Vergleiche lassen sich stochastische Systeme analysieren. Die Untersuchung von Irreduzibilität, Periodizität und Ergodizität zeigt, wie graphtheoretische Eigenschaften mit stochastischen Konzepten verknüpft werden können. Die Analyse der Stabilität stationärer Verteilungen unter Transformationen eröffnet neue Perspektiven für die Bewertung adaptiver stochastischer Systeme.
+
+\subsection{Methodische Stärken}
+
+Die entwickelte Methodik zeichnet sich durch mehrere charakteristische Stärken aus:
+
+Die \textbf{Skalierbarkeit} des Ansatzes ermöglicht die Analyse von Systemen unterschiedlicher Größe. Während kleine Systeme (wenige Knoten, wenige Transformationsschritte) in Sekundenbruchteilen analysiert werden können, bleiben auch Systeme mit mehreren hundert Zuständen noch praktikabel analysierbar. Die polynomielle Laufzeit ($O(n^5)$) steht im starken Kontrast zu exponentiellen oder faktoriellen Komplexitäten naiver Ansätze.
+
+Die \textbf{Modularität} der Implementierung erlaubt es, einzelne Komponenten unabhängig voneinander zu entwickeln und zu testen. Die Graphklasse, die Transformationslogik, der Subgraph Algorithmus und die Stabilitätsanalyse sind sauber getrennt und über klar definierte Schnittstellen verbunden. Dies erleichtert Erweiterungen und Anpassungen erheblich.
+
+Die \textbf{Verifikation} der Ergebnisse ist durch die formale Fundierung gewährleistet. Sätze über die Korrektheit der Algorithmen (Sequenzberechnung, Subgraph-Erkennung) garantieren, dass keine falschen Positiven oder falschen Negativen auftreten. Die Vergleichsmatrix $M$ liefert eine vollständige und korrekte Übersicht über alle Subgraph-Beziehungen in der Zustandssequenz.
+
+Die \textbf{Interpretierbarkeit} der Ergebnisse unterstützt praktische Anwendungen. Die Vergleichsmatrix, Subgraph-Sequenzen, stabile Zustände und Zyklen können direkt interpretiert werden und liefern unmittelbar verwertbare Aussagen über Systemeigenschaften. Dies unterscheidet den Ansatz von Black-Box-Methoden, deren Ergebnisse oft schwer nachvollziehbar sind.
+
+\subsection{Vergleich mit verwandten Ansätzen}
+
+Die entwickelte Methodik positioniert sich im Kontext verwandter Forschungsrichtungen:
+
+Im Vergleich zu \textbf{klassischen Graphtransformationssystemen} (z.B. nach Ehrig et al.) bietet der Ansatz eine spezialisierte Fokussierung auf Stabilitätsanalyse. Während klassische Systeme primär die Anwendbarkeit und Terminierung von Transformationen untersuchen, liegt hier der Schwerpunkt auf der Analyse von Zustandssequenzen und der Identifikation von Verhaltensmustern.
+
+Gegenüber \textbf{Model-Checking-Verfahren} für Zustandsautomaten unterscheidet sich der Ansatz durch die graphbasierte Repräsentation und die explizite Subgraph-Analyse. Model-Checker arbeiten typischerweise mit temporaler Logik und symbolischen Methoden, während hier strukturelle Grapheigenschaften im Vordergrund stehen. Die Ansätze sind komplementär und könnten kombiniert werden.
+
+Im Vergleich zu \textbf{Markov-Analyse-Werkzeugen} (PRISM, STORM) bietet die Methodik eine explizite Transformationsperspektive. Statt nur eine gegebene Markov-Kette zu analysieren, werden Sequenzen von Ketten und deren Evolution betrachtet. Dieses Vorgehen ermöglicht Aussagen über die Entwicklung stochastischer Systeme unter strukturellen Änderungen.
+
+\subsection{Beitrag zur Forschung}
+
+Die vorliegende Arbeit leistet mehrere Beiträge zur Forschung im Bereich formaler Methoden und Systemanalyse:
+
+\textbf{Methodisch} wird die Verbindung von Graphtransformationen und effizienter Subgraph-Erkennung zur Stabilitätsanalyse etabliert. Dies schließt eine Lücke zwischen theoretischen Graphtransformationssystemen und praktisch anwendbaren Analysemethoden.
+
+\textbf{Algorithmisch} demonstriert die Arbeit, wie der Subgraph Algorithmus mit $O(n^3)$ Laufzeit als Grundbaustein für komplexere Analysen dienen kann. Die Reduktion von faktorieller auf polynomielle Komplexität durch Nutzung zyklischer Rotationen statt vollständiger Permutationen ist zentral für die Praktikabilität.
+
+\textbf{Anwendungsbezogen} zeigt die Erweiterung auf Markov-Ketten, wie die Methodik auf stochastische Systeme übertragen werden kann. Die Analyse von Irreduzibilität, Ergodizität und Stabilität stationärer Verteilungen unter Transformationen eröffnet neue Perspektiven für adaptive stochastische Modelle.
 
 \subsection{Ausblick}
 
 Für die Weiterentwicklung der Systemstabilitätsanalyse durch Graphtransformationen ergeben sich vielfältige Forschungsrichtungen, die sich in drei Bereiche gliedern lassen: Optimierungen des bestehenden Algorithmus, konzeptionelle Erweiterungen sowie neue Anwendungsgebiete.
 
-\subsubsection{Optimierungen}
-
-Im Bereich der Optimierungen bietet die Parallelisierung der Vergleichsmatrix-Berechnung erhebliches Potenzial. Da die einzelnen Subgraph-Vergleiche voneinander unabhängig sind, können sie problemlos auf mehrere Prozessorkerne verteilt werden. Dies würde bei modernen Multi-Core-Systemen eine nahezu lineare Beschleunigung ermöglichen und die Gesamtlaufzeit deutlich reduzieren.
+Im Bereich der Optimierungen bietet die Parallelisierung der Berechnung der Vergleichsmatrix erhebliches Potenzial. Da die einzelnen Subgraph-Vergleiche voneinander unabhängig sind, können sie problemlos auf mehrere Prozessorkerne verteilt werden. Dies würde bei modernen Multi-Core-Systemen eine nahezu lineare Beschleunigung ermöglichen und die Gesamtlaufzeit deutlich reduzieren.
 
 Ein weiterer vielversprechender Ansatz ist die inkrementelle Analyse. Anstatt bei jedem neuen Systemzustand die gesamte Vergleichsmatrix neu zu berechnen, könnten nur die Vergleiche des neuen Zustands mit allen bestehenden Zuständen durchgeführt werden. Dies würde die Laufzeit für jeden zusätzlichen Schritt reduzieren und die Analyse von langfristigen Systemverläufen erheblich beschleunigen.
 
 Für sehr große Systeme mit mehr als tausend Zuständen könnten approximative Verfahren eingesetzt werden. Diese würden einen bewussten Trade-off zwischen Genauigkeit und Laufzeit eingehen, indem sie beispielsweise nur eine Stichprobe von Zuständen vergleichen oder heuristische Abbruchkriterien verwenden. Dadurch ließe sich die Analyse auch auf Systeme anwenden, für die eine vollständige Berechnung zu zeitaufwändig wäre.
-
-\subsubsection{Erweiterungen}
 
 Konzeptionell eröffnen sich zahlreiche Erweiterungsmöglichkeiten des Grundansatzes. Die Integration gewichteter Graphen würde es ermöglichen, quantitative Eigenschaften von Systemzuständen zu modellieren. Kantengewichte könnten beispielsweise Wahrscheinlichkeiten, Kosten oder Kapazitäten repräsentieren. Der Subgraph Algorithmus müsste entsprechend erweitert werden, um nicht nur strukturelle Gleichheit, sondern auch die Verträglichkeit von Gewichten zu prüfen.
 
@@ -364,8 +713,6 @@ Probabilistische Transformationen würden die Modellierung nicht-deterministisch
 Die Unterstützung hierarchischer Graphen würde Systeme mit mehreren Abstraktionsebenen zugänglich machen. Knoten könnten selbst wieder Graphen repräsentieren, was die Modellierung komplexer Systemarchitekturen erheblich vereinfachen würde. Der Subgraph Algorithmus müsste rekursiv auf verschiedenen Hierarchieebenen operieren können.
 
 Schließlich wäre die Integration von Echtzeitaspekten für viele praktische Anwendungen essentiell. Durch die Berücksichtigung von Zeitbedingungen und Deadlines bei Transformationen könnten zeitkritische Systeme analysiert werden. Die Stabilitätsanalyse müsste dann auch temporale Eigenschaften wie maximale Antwortzeiten oder Periodizität untersuchen.
-
-\subsubsection{Anwendungsgebiete}
 
 Die entwickelte Methodik eröffnet vielfältige neue Anwendungsgebiete. Im Bereich der Cyber-Physical Systems könnten eingebettete Systeme und IoT-Anwendungen analysiert werden. Die Wechselwirkung zwischen physikalischen Prozessen und Software-Steuerung ließe sich durch Graphtransformationen elegant modellieren, wobei die Stabilitätsanalyse kritische Systemzustände identifizieren könnte.
 
@@ -379,12 +726,12 @@ Schließlich bieten soziale Netzwerke ein interessantes Anwendungsgebiet für di
 
 Die Kombination von Graphtransformationen und dem Subgraph Algorithmus bietet eine leistungsfähige Methode zur Systemstabilitätsanalyse. Die Effizienz des Ansatzes ermöglicht die Analyse realistischer Systeme, während die formale Fundierung korrekte und nachvollziehbare Ergebnisse garantiert.
 
-Die praktische Anwendbarkeit wird durch die Implementierung in Python und einem Beispiel einer Ampelkreuzung demonstriert. Die Analyse liefert wertvolle Einblicke in Systemverhalten, Stabilitätseigenschaften und potenzielle Fehlerquellen.
+Die praktische Anwendbarkeit wurde durch die Implementierung in Python und Beispiele wie die Ampelkreuzung und Wetter-Markov-Kette demonstriert. Die Analyse liefert wertvolle Einblicke in Systemverhalten, Stabilitätseigenschaften und potenzielle Fehlerquellen. Die erfolgreiche Anwendung auf sowohl deterministische Systeme (Ampelsteuerung) als auch stochastische Systeme (Markov-Ketten) zeigt die Vielseitigkeit des Ansatzes.
 
-Der Subgraph Algorithmus ist dabei das zentrale Element, das durch seine Effizienz und Korrektheit die gesamte Analyse erst praktikabel macht. Ohne diese effiziente Subgraph-Erkennung wäre die paarweise Vergleichsmatrix-Berechnung für realistische Systemgrößen nicht durchführbar.
+Der Subgraph Algorithmus ist dabei das zentrale Element, das durch seine Effizienz und Korrektheit die gesamte Analyse erst praktikabel macht. Ohne diese effiziente Subgraph-Erkennung mit $O(n^3)$ Laufzeit wäre die paarweise Vergleichsmatrix-Berechnung für realistische Systemgrößen nicht durchführbar. Die Reduktion von faktorieller auf polynomielle Komplexität durch Verwendung zyklischer Rotationen statt vollständiger Permutationen ist der Schlüssel zum Erfolg.
 
 \subsection{Implementierung}
 
-Der Python Code für die Implementierung  den Algorithmus der Systemstabilitätsanalyse und die Tests wurden mit Claude AI generiert. Der Code ist verfügbar unter: \url{https://github.com/hjstephan/graph-trans}. In diesem Repository befindet sich auch der generierte Code Coverage Report im HTML Format.
+Der Python Code für die Implementierung des Algorithmus der Systemstabilitätsanalyse und die Tests wurden mit Claude AI generiert. Der Code ist verfügbar unter: \url{https://github.com/hjstephan/graph-trans}. In diesem Repository befindet sich auch der generierte Code Coverage Report im HTML Format.
 
 \end{document}
