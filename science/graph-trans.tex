@@ -337,6 +337,32 @@ Es folgt der vollständige Algorithmus zur Systemstabilitätsanalyse.
 	Der Beweis geht direkt aus der Analyse der Effizienz aus Kapitel \ref{sec:sa} hervor.
 \end{proof}
 
+\section{Softwaresysteme}
+
+Softwaresysteme sind heute in vielen Bereichen des Alltags notwendig für die erfolgreiche und zuverlässige Ausführung unterschiedlicher Abläufe und Aufgaben. In diesem Kapitel wird das Softwaresystem definiert und in seinen Eigenschaften betrachtet.
+
+\begin{definition}[Softwaresystem]
+	Ein Softwaresystem $M$ besteht aus einer Menge von Zuständen $Q$, die miteinander verbunden sind und auf Eingaben für das Softwaresystem reagieren.
+\end{definition}
+
+\begin{definition}[Sprache eines Softwaresystems]
+	Die Sprache eines Softwaresystems $L(M)$ enthält alle Worte, die durch die Verbindung der Zustände durch die Eingabe für das Softwaresystem erzeugt werden.
+\end{definition}
+
+\begin{definition}[Dynamisches Softwaresystem]
+	Ein Softwaresystem $M$ ist dynamisch, wenn der aktuelle Zustand $Q_{t}$, in dem sich $M$ zum Zeitpunkt $t$ befindet, abhängt von mindestens einem Zeitpunkt $t-1$ und mindestens einem Zustand $Q_{t-1}'$ mit $Q'_{t-1} \neq Q_{t}$.
+\end{definition}
+
+\begin{definition}[Minimales Softwaresystem]
+	Ein Softwaresystem $M$ ist minimal, wenn durch Wegnahme eines weiteren Zustandes $Q$ die Sprache $L(M)$ verändert wird.
+\end{definition}
+Von besonderem Interesse sind nur die Zustände eines Softwaresystems $M$, die den \textit{Kern} des Softwaresystems bilden, ohne dabei $L(M)$ zu verändern. Minimal dynamische Softwaresysteme haben den Vorteil, dass sie leichter änderbar sind. Veränderungen an Zuständen wird dadurch weniger die Möglichkeit gegeben, die Sprache $L(M)$ zu verändern entgegen der eigentlichen Spezifikation.
+
+\begin{definition}[Verifizierbarkeit von Softwaresystemen]
+	Zwei Softwaresysteme $M$ und $M'$ sind verifizierbar auf $L(M) = L(M')$, wenn $M$ und $M'$ minimal sind.
+\end{definition}
+Dadurch, dass bei der Verifikation nur noch der entscheidende Kern von Zuständen sowohl bei $M$ und $M'$ betrachtet werden muss, ist die Verifikation beider Systeme $M$ und $M'$ effizient möglich.
+
 \section{Stabilitätsanalyse von Markov-Ketten}
 
 In diesem Kapitel wird gezeigt, wie die entwickelte Methodik zur Systemstabilitätsanalyse auf Markov-Ketten angewendet werden kann. Markov-Ketten sind stochastische Prozesse, die sich natürlich durch Graphen darstellen lassen, wobei Zustände als Knoten und Übergangswahrscheinlichkeiten als gewichtete Kanten repräsentiert werden.
@@ -344,7 +370,7 @@ In diesem Kapitel wird gezeigt, wie die entwickelte Methodik zur Systemstabilit�
 \subsection{Grundlagen der Markov-Ketten}
 
 \begin{definition}[Markov-Kette]
-	Eine zeitdiskrete Markov-Kette ist ein stochastischer Prozess $(X_t)_{t \geq 0}$ mit endlichem Zustandsraum $S = \{s_1, s_2, \ldots, s_n\}$ und der Markov-Eigenschaft:
+	Eine zeitdiskrete Markov-Kette ist ein stochastischer Prozess $(X_t)_{t \geq 0}$ mit endlichem Zustandsraum $S = \{s_1, s_2, \ldots, s_n\}$ und der Markov-Eigen\-schaft:
 	\begin{align}
 		P(X_{t+1} = s_j \mid X_t = s_i, X_{t-1}, \ldots, X_0) = P(X_{t+1} = s_j \mid X_t = s_i) = p_{ij}
 	\end{align}
@@ -375,7 +401,7 @@ Eine Markov-Kette lässt sich als gewichteter gerichteter Graph $G_{MC} = (V, E,
 	\item[-] Gewichtsfunktion $w: E \rightarrow (0, 1]$ mit $w((s_i, s_j)) = p_{ij}$
 \end{itemize}
 
-Die Adjazenzmatrix $A$ des Graphen entspricht der binären Version der Übergangsmatrix:
+Die Adjazenzmatrix $A$ des Graphen entspricht der binären Version der Übergangs-matrix:
 \begin{align}
 	A_{ij} = \begin{cases}
 		1 & \text{falls } p_{ij} > 0 \\
@@ -430,7 +456,7 @@ Die Stabilitätsanalyse von Markov-Ketten untersucht folgende Eigenschaften:
 \subsubsection{Irreduzibilität}
 
 \begin{definition}[Irreduzibilität]
-	Eine Markov-Kette heißt irreduzibel, wenn jeder Zu-stand von jedem anderen Zustand aus erreichbar ist. Graphtheoretisch bedeutet dies, dass der zugehörige Graph stark zusammenhängend ist.
+	Eine Markov-Kette heißt irreduzibel, wenn jeder Zustand von jedem anderen Zustand aus erreichbar ist. Graphtheoretisch bedeutet dies, dass der zugehörige Graph stark zusammenhängend ist.
 \end{definition}
 
 Die Irreduzibilität lässt sich durch Analyse der Adjazenzmatrix prüfen. Nach Anwendung von Transformationen kann die Irreduzibilität verloren gehen oder wiederhergestellt werden.
@@ -506,7 +532,7 @@ Der Subgraph Algorithmus wird auf die Adjazenzmatrizen der Markov-Ketten angewen
 Dies bedeutet: Wenn $A_i \subseteq A_j$, dann hat $MC_j$ mindestens alle Übergänge von $MC_i$ (möglicherweise mit unterschiedlichen Wahrscheinlichkeiten).
 
 \begin{satz}[Monotone Erweiterung der Erreichbarkeit]
-	Sei $(MC_0, MC_1, \ldots, MC_k)$ eine Sub-graph-Sequenz mit $A_i \subseteq A_{i+1}$ für alle $i$. Dann gilt:
+	Sei $(MC_0, MC_1, \ldots, MC_k)$ eine Sub\-graph-Sequenz mit $A_i \subseteq A_{i+1}$ für alle $i$. Dann gilt:
 	\begin{enumerate}
 		\item Wenn $MC_0$ irreduzibel ist, dann sind alle $MC_i$ irreduzibel
 		\item Die Menge der erreichbaren Zustände ist monoton nicht-abnehmend
@@ -531,7 +557,7 @@ Für eine Sequenz von $k$ Markov-Ketten wird die Vergleichsmatrix $M \in \{0,1\}
 Zusätzlich können gewichtsspezifische Vergleiche durchgeführt werden:
 
 \begin{definition}[Gewichtete Subgraph-Beziehung]
-	Eine Markov-Kette $MC_i$ mit Über-gangsmatrix $P_i$ ist ein gewichteter Subgraph von $MC_j$ mit Übergangsmatrix $P_j$, geschrieben $MC_i \subseteq_w MC_j$, wenn:
+	Eine Markov-Kette $MC_i$ mit Über\-gangsmatrix $P_i$ ist ein gewichteter Subgraph von $MC_j$ mit Übergangsmatrix $P_j$, geschrieben $MC_i \subseteq_w MC_j$, wenn:
 	\begin{align}
 		A_i \subseteq A_j \quad \text{und} \quad p_{ij}^{(i)} \leq p_{ij}^{(j)} \quad \text{für alle } (s_i, s_j) \in E_i
 	\end{align}
@@ -587,7 +613,7 @@ Zusätzlich können gewichtsspezifische Vergleiche durchgeführt werden:
 	\textbf{Analyse}:
 	\begin{itemize}
 		\item[-] Subgraph-Sequenz: $A_0 \subseteq A_1 \subseteq A_2$
-		\item[-] $MC_0$ ist nicht irreduzibel (sonnig und bewölkt können nicht nach regnerisch über-gehen direkt)
+		\item[-] $MC_0$ ist nicht irreduzibel (sonnig und bewölkt können nicht nach regnerisch über\-gehen direkt)
 		\item[-] $MC_1$ ist nicht irreduzibel (regnerisch kann nicht nach sonnig übergehen)
 		\item[-] $MC_2$ ist irreduzibel und aperiodisch (vollständig verbunden mit Selbstschleifen) $\Rightarrow$ ergodisch
 	\end{itemize}
@@ -639,12 +665,12 @@ Die Systemstabilitätsanalyse lässt sich erfolgreich auf Markov-Ketten anwenden
 
 \begin{itemize}
 	\item[-] Transformationen können als farbcodierte Graphregeln modelliert werden
-	\item[-] Der Subgraph Algorithmus identifiziert monotone Erweiterungen der Übergangs-möglichkeiten
+	\item[-] Der Subgraph Algorithmus identifiziert monotone Erweiterungen der Übergangs\-möglichkeiten
 	\item[-] Irreduzibilität und Ergodizität können durch Transformationen erreicht oder verloren werden
 	\item[-] Die Analyse von Transformationssequenzen zeigt die Evolution stochastischer Systeme
 \end{itemize}
 
-Die Kombination von Markov-Theorie und Graphtransformationen eröffnet neue Mög-lichkeiten für die Analyse stochastischer Systeme, insbesondere im Bereich der Perfor-mance-Modellierung, Zuverlässigkeitsanalyse und adaptiven Systeme.
+Die Kombination von Markov-Theorie und Graphtransformationen eröffnet neue Mög\-lichkeiten für die Analyse stochastischer Systeme, insbesondere im Bereich der Perfor\-mance-Modellierung, Zuverlässigkeitsanalyse und adaptiven Systeme.
 
 \section{Zusammenfassung}
 
@@ -660,7 +686,7 @@ Die wesentlichen Beiträge dieser Arbeit lassen sich in vier Bereiche gliedern:
 
 \textbf{Umfassende Analysemöglichkeiten}: Die Methodik ermöglicht die Identifikation verschiedener Systemeigenschaften. Durch die Berechnung der Vergleichsmatrix $M$ können längste Subgraph-Sequenzen identifiziert werden, die monotone Systemerweiterungen repräsentieren. Die Erkennung stabiler Zustände (Ruhelagen) erfolgt durch Prüfung auf identische aufeinanderfolgende Systemzustände. Zyklen werden durch paarweisen Vergleich aller Zustände in der Sequenz erkannt. Diese drei Analysetypen liefern komplementäre Einblicke in das Systemverhalten.
 
-\textbf{Anwendung auf Markov-Ketten}: Die Erweiterung der Methodik auf Markov-Ketten demonstriert die Vielseitigkeit des Ansatzes. Durch Interpretation von Übergangs-wahrscheinlichkeiten als Kantengewichte und Verwendung der binären Adjazenzmatrix für strukturelle Vergleiche lassen sich stochastische Systeme analysieren. Die Untersuchung von Irreduzibilität, Periodizität und Ergodizität zeigt, wie graphtheoretische Eigenschaften mit stochastischen Konzepten verknüpft werden können. Die Analyse der Stabilität stationärer Verteilungen unter Transformationen eröffnet neue Perspektiven für die Bewertung adaptiver stochastischer Systeme.
+\textbf{Anwendung auf Markov-Ketten}: Die Erweiterung der Methodik auf Markov-Ketten demonstriert die Vielseitigkeit des Ansatzes. Durch Interpretation von Übergangs\-wahrscheinlichkeiten als Kantengewichte und Verwendung der binären Adjazenzmatrix für strukturelle Vergleiche lassen sich stochastische Systeme analysieren. Die Untersuchung von Irreduzibilität, Periodizität und Ergodizität zeigt, wie graphtheoretische Eigenschaften mit stochastischen Konzepten verknüpft werden können. Die Analyse der Stabilität stationärer Verteilungen unter Transformationen eröffnet neue Perspektiven für die Bewertung adaptiver stochastischer Systeme.
 
 \subsection{Methodische Stärken}
 
@@ -688,7 +714,7 @@ Im Vergleich zu \textbf{Markov-Analyse-Werkzeugen} (PRISM, STORM) bietet die Met
 
 Die vorliegende Arbeit leistet mehrere Beiträge zur Forschung im Bereich formaler Methoden und Systemanalyse:
 
-\textbf{Methodisch} wird die Verbindung von Graphtransformationen und effizienter Subgraph-Erkennung zur Stabilitätsanalyse etabliert. Dies schließt eine Lücke zwischen theoretischen Graphtransformationssystemen und praktisch anwendbaren Analysemethoden.
+\textbf{Methodisch} wird die Verbindung von Graphtransformationen und effizienter Sub-graph-Erkennung zur Stabilitätsanalyse etabliert. Dies schließt eine Lücke zwischen theoretischen Graphtransformationssystemen und praktisch anwendbaren Analysemethoden.
 
 \textbf{Algorithmisch} demonstriert die Arbeit, wie der Subgraph Algorithmus mit $O(n^3)$ Laufzeit als Grundbaustein für komplexere Analysen dienen kann. Die Reduktion von faktorieller auf polynomielle Komplexität durch Nutzung zyklischer Rotationen statt vollständiger Permutationen ist zentral für die Praktikabilität.
 
