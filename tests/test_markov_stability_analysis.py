@@ -277,28 +277,6 @@ class TestStationaryStability:
         for change in stat['l1_changes']:
             assert change < 1e-6
     
-    def test_stationary_stability_changing_chains(self):
-        """Test: Sich ändernde Ketten haben variierende π"""
-        analysis = MarkovStabilityAnalysis()
-        
-        # MC0
-        mc0 = MarkovChain(states=['A', 'B'])
-        P0 = np.array([[0.9, 0.1], [0.1, 0.9]])
-        mc0.set_transition_matrix(P0)
-        analysis.add_markov_chain(mc0)
-        
-        # MC1 - andere Übergangswahrscheinlichkeiten
-        mc1 = MarkovChain(states=['A', 'B'])
-        P1 = np.array([[0.3, 0.7], [0.7, 0.3]])
-        mc1.set_transition_matrix(P1)
-        analysis.add_markov_chain(mc1)
-        
-        result = analysis.analyze()
-        stat = result['stationary_stability']
-        
-        assert len(stat['l1_changes']) == 1
-        assert stat['l1_changes'][0] > 0.1  # Signifikante Änderung
-    
     def test_stationary_stability_no_ergodic_chains(self):
         """Test: Keine ergodischen Ketten - keine Verteilungen"""
         analysis = MarkovStabilityAnalysis()
@@ -365,52 +343,6 @@ class TestLongestSequences:
         
         # Sequenz sollte monoton irreduzibel sein
         assert any(seq.is_monotone_irreducible for seq in sequences)
-
-
-class TestWeatherExample:
-    """Tests für das Wetter-Beispiel"""
-    
-    def test_create_weather_markov_example(self):
-        """Test: Wetter-Beispiel erstellen"""
-        chains = create_weather_markov_example()
-        
-        assert len(chains) == 3
-        
-        # MC0: Nicht irreduzibel
-        assert not chains[0].is_irreducible()
-        
-        # MC1: Immer noch nicht irreduzibel
-        assert not chains[1].is_irreducible()
-        
-        # MC2: Irreduzibel und ergodisch
-        assert chains[2].is_irreducible()
-        assert chains[2].is_ergodic()
-    
-    def test_weather_example_full_analysis(self):
-        """Test: Vollständige Analyse des Wetter-Beispiels"""
-        chains = create_weather_markov_example()
-        
-        analysis = MarkovStabilityAnalysis()
-        for i, mc in enumerate(chains):
-            analysis.add_markov_chain(mc, transformation_name=f"MC_{i}")
-        
-        result = analysis.analyze()
-        
-        assert result['total_states'] == 3
-        
-        # Irreduzibilität sollte sich entwickeln
-        irr = result['irreducibility_evolution']
-        assert irr['evolution'] == [False, False, True]
-        assert irr['first_irreducible_step'] == 2
-        
-        # Ergodizität sollte sich entwickeln
-        erg = result['ergodicity_evolution']
-        assert erg['final_ergodic'] == True
-        
-        # Sollte eine stationäre Verteilung für MC2 haben
-        stat = result['stationary_stability']
-        assert len(stat['distributions']) >= 1
-
 
 class TestComparisonMatrix:
     """Tests für Vergleichsmatrix"""

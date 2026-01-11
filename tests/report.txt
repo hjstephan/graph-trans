@@ -5,7 +5,7 @@ rootdir: /home/stephan/Git/graph-trans
 configfile: pytest.ini
 testpaths: tests
 plugins: cov-7.0.0
-collecting ... collected 110 items
+collecting ... collected 106 items
 
 tests/test_graph.py::TestNode::test_node_creation PASSED                 [  0%]
 tests/test_graph.py::TestNode::test_node_with_attributes PASSED          [  1%]
@@ -18,94 +18,90 @@ tests/test_graph.py::TestGraph::test_add_node PASSED                     [  7%]
 tests/test_graph.py::TestGraph::test_add_edge PASSED                     [  8%]
 tests/test_graph.py::TestGraph::test_add_edge_invalid_nodes PASSED       [  9%]
 tests/test_graph.py::TestGraph::test_get_node PASSED                     [ 10%]
-tests/test_graph.py::TestGraph::test_get_nodes_by_color PASSED           [ 10%]
-tests/test_graph.py::TestGraph::test_get_edges_by_color PASSED           [ 11%]
-tests/test_graph.py::TestGraph::test_remove_node PASSED                  [ 12%]
-tests/test_graph.py::TestGraph::test_remove_nonexistent_node PASSED      [ 13%]
-tests/test_graph.py::TestGraph::test_remove_edge PASSED                  [ 14%]
-tests/test_graph.py::TestGraph::test_remove_nonexistent_edge PASSED      [ 15%]
+tests/test_graph.py::TestGraph::test_get_nodes_by_color PASSED           [ 11%]
+tests/test_graph.py::TestGraph::test_get_edges_by_color PASSED           [ 12%]
+tests/test_graph.py::TestGraph::test_remove_node PASSED                  [ 13%]
+tests/test_graph.py::TestGraph::test_remove_nonexistent_node PASSED      [ 14%]
+tests/test_graph.py::TestGraph::test_remove_edge PASSED                  [ 15%]
+tests/test_graph.py::TestGraph::test_remove_nonexistent_edge PASSED      [ 16%]
 tests/test_graph.py::TestGraph::test_copy PASSED                         [ 16%]
 tests/test_graph.py::TestGraph::test_contains PASSED                     [ 17%]
 tests/test_graph.py::TestGraph::test_repr PASSED                         [ 18%]
 tests/test_graph.py::TestGraphSubgraphInterface::test_to_adjacency_matrix_empty_graph PASSED [ 19%]
 tests/test_graph.py::TestGraphSubgraphInterface::test_to_adjacency_matrix_single_node PASSED [ 20%]
-tests/test_graph.py::TestGraphSubgraphInterface::test_to_adjacency_matrix_with_edges PASSED [ 20%]
-tests/test_graph.py::TestGraphSubgraphInterface::test_to_adjacency_matrix_sorted_nodes PASSED [ 21%]
-tests/test_graph.py::TestGraphSubgraphInterface::test_from_adjacency_matrix_empty PASSED [ 22%]
-tests/test_graph.py::TestGraphSubgraphInterface::test_from_adjacency_matrix_with_default_ids PASSED [ 23%]
-tests/test_graph.py::TestGraphSubgraphInterface::test_from_adjacency_matrix_with_custom_ids PASSED [ 24%]
-tests/test_graph.py::TestGraphSubgraphInterface::test_from_adjacency_matrix_invalid_node_ids_length PASSED [ 25%]
-tests/test_graph.py::TestGraphSubgraphInterface::test_roundtrip_graph_to_matrix_to_graph PASSED [ 26%]
-tests/test_graph.py::TestGraphSubgraphInterface::test_get_node_list_empty PASSED [ 27%]
-tests/test_graph.py::TestGraphSubgraphInterface::test_get_node_list_sorted PASSED [ 28%]
-tests/test_graph.py::TestGraphSubgraphInterface::test_get_node_list_consistency PASSED [ 29%]
-tests/test_graph.py::TestGraphSubgraphInterface::test_adjacency_matrix_preserves_graph_structure PASSED [ 30%]
-tests/test_graph.py::TestGraphSubgraphInterface::test_adjacency_matrix_dtype PASSED [ 30%]
-tests/test_markov_chain.py::TestMarkovChainCreation::test_empty_markov_chain PASSED [ 31%]
-tests/test_markov_chain.py::TestMarkovChainCreation::test_markov_chain_with_states PASSED [ 32%]
-tests/test_markov_chain.py::TestMarkovChainCreation::test_markov_chain_with_transition_matrix PASSED [ 33%]
-tests/test_markov_chain.py::TestMarkovChainCreation::test_invalid_transition_matrix_shape PASSED [ 34%]
-tests/test_markov_chain.py::TestMarkovChainCreation::test_invalid_transition_matrix_not_stochastic PASSED [ 35%]
-tests/test_markov_chain.py::TestMarkovChainCreation::test_invalid_transition_matrix_negative PASSED [ 36%]
-tests/test_markov_chain.py::TestTransitionMatrix::test_set_and_get_transition_matrix PASSED [ 37%]
-tests/test_markov_chain.py::TestTransitionMatrix::test_transition_matrix_creates_edges PASSED [ 38%]
-tests/test_markov_chain.py::TestTransitionMatrix::test_edge_probabilities PASSED [ 39%]
-tests/test_markov_chain.py::TestTransitionMatrix::test_transition_matrix_reconstruction PASSED [ 40%]
-tests/test_markov_chain.py::TestIrreducibility::test_irreducible_chain FAILED [ 40%]
-tests/test_markov_chain.py::TestIrreducibility::test_reducible_chain PASSED [ 41%]
-tests/test_markov_chain.py::TestIrreducibility::test_empty_chain_is_irreducible PASSED [ 42%]
-tests/test_markov_chain.py::TestIrreducibility::test_single_state_chain PASSED [ 43%]
-tests/test_markov_chain.py::TestPeriodicity::test_aperiodic_chain_with_self_loop PASSED [ 44%]
-tests/test_markov_chain.py::TestPeriodicity::test_periodic_chain PASSED  [ 45%]
-tests/test_markov_chain.py::TestPeriodicity::test_period_of_nonexistent_state PASSED [ 46%]
-tests/test_markov_chain.py::TestPeriodicity::test_period_default_state PASSED [ 47%]
-tests/test_markov_chain.py::TestPeriodicity::test_empty_chain_period PASSED [ 48%]
-tests/test_markov_chain.py::TestErgodicity::test_ergodic_chain PASSED    [ 49%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_to_adjacency_matrix_with_edges PASSED [ 21%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_to_adjacency_matrix_sorted_nodes PASSED [ 22%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_from_adjacency_matrix_empty PASSED [ 23%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_from_adjacency_matrix_with_default_ids PASSED [ 24%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_from_adjacency_matrix_with_custom_ids PASSED [ 25%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_from_adjacency_matrix_invalid_node_ids_length PASSED [ 26%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_roundtrip_graph_to_matrix_to_graph PASSED [ 27%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_get_node_list_empty PASSED [ 28%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_get_node_list_sorted PASSED [ 29%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_get_node_list_consistency PASSED [ 30%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_adjacency_matrix_preserves_graph_structure PASSED [ 31%]
+tests/test_graph.py::TestGraphSubgraphInterface::test_adjacency_matrix_dtype PASSED [ 32%]
+tests/test_markov_chain.py::TestMarkovChainCreation::test_empty_markov_chain PASSED [ 33%]
+tests/test_markov_chain.py::TestMarkovChainCreation::test_markov_chain_with_states PASSED [ 33%]
+tests/test_markov_chain.py::TestMarkovChainCreation::test_markov_chain_with_transition_matrix PASSED [ 34%]
+tests/test_markov_chain.py::TestMarkovChainCreation::test_invalid_transition_matrix_shape PASSED [ 35%]
+tests/test_markov_chain.py::TestMarkovChainCreation::test_invalid_transition_matrix_not_stochastic PASSED [ 36%]
+tests/test_markov_chain.py::TestMarkovChainCreation::test_invalid_transition_matrix_negative PASSED [ 37%]
+tests/test_markov_chain.py::TestTransitionMatrix::test_set_and_get_transition_matrix PASSED [ 38%]
+tests/test_markov_chain.py::TestTransitionMatrix::test_transition_matrix_creates_edges PASSED [ 39%]
+tests/test_markov_chain.py::TestTransitionMatrix::test_edge_probabilities PASSED [ 40%]
+tests/test_markov_chain.py::TestTransitionMatrix::test_transition_matrix_reconstruction PASSED [ 41%]
+tests/test_markov_chain.py::TestIrreducibility::test_irreducible_chain PASSED [ 42%]
+tests/test_markov_chain.py::TestIrreducibility::test_empty_chain_is_irreducible PASSED [ 43%]
+tests/test_markov_chain.py::TestIrreducibility::test_single_state_chain PASSED [ 44%]
+tests/test_markov_chain.py::TestPeriodicity::test_aperiodic_chain_with_self_loop PASSED [ 45%]
+tests/test_markov_chain.py::TestPeriodicity::test_periodic_chain PASSED  [ 46%]
+tests/test_markov_chain.py::TestPeriodicity::test_period_of_nonexistent_state PASSED [ 47%]
+tests/test_markov_chain.py::TestPeriodicity::test_period_default_state PASSED [ 48%]
+tests/test_markov_chain.py::TestPeriodicity::test_empty_chain_period PASSED [ 49%]
+tests/test_markov_chain.py::TestErgodicity::test_ergodic_chain PASSED    [ 50%]
 tests/test_markov_chain.py::TestErgodicity::test_not_ergodic_reducible PASSED [ 50%]
-tests/test_markov_chain.py::TestErgodicity::test_not_ergodic_periodic FAILED [ 50%]
-tests/test_markov_chain.py::TestStationaryDistribution::test_stationary_distribution_ergodic_chain PASSED [ 51%]
-tests/test_markov_chain.py::TestStationaryDistribution::test_stationary_distribution_not_ergodic PASSED [ 52%]
-tests/test_markov_chain.py::TestStationaryDistribution::test_stationary_distribution_empty_chain PASSED [ 53%]
-tests/test_markov_chain.py::TestStationaryDistribution::test_stationary_distribution_absorbing_state PASSED [ 54%]
-tests/test_markov_chain.py::TestTransitionModification::test_add_transition PASSED [ 55%]
-tests/test_markov_chain.py::TestTransitionModification::test_remove_transition PASSED [ 56%]
-tests/test_markov_chain.py::TestTransitionModification::test_add_transition_invalid_probability PASSED [ 57%]
-tests/test_markov_chain.py::TestTransitionModification::test_add_transition_nonexistent_state PASSED [ 58%]
-tests/test_markov_chain.py::TestMarkovChainCopy::test_copy_markov_chain PASSED [ 59%]
-tests/test_markov_chain.py::TestMarkovChainCopy::test_copy_is_independent PASSED [ 60%]
-tests/test_markov_chain.py::TestMarkovChainRepr::test_repr_ergodic PASSED [ 60%]
-tests/test_markov_chain.py::TestMarkovChainRepr::test_repr_not_ergodic PASSED [ 61%]
-tests/test_markov_chain.py::TestAdjacencyMatrixIntegration::test_to_adjacency_matrix PASSED [ 62%]
-tests/test_markov_chain.py::TestAdjacencyMatrixIntegration::test_adjacency_preserves_transitions PASSED [ 63%]
-tests/test_markov_stability_analysis.py::TestMarkovState::test_markov_state_creation PASSED [ 64%]
-tests/test_markov_stability_analysis.py::TestMarkovState::test_markov_state_post_init FAILED [ 65%]
-tests/test_markov_stability_analysis.py::TestMarkovState::test_markov_state_ergodic_computes_stationary PASSED [ 66%]
-tests/test_markov_stability_analysis.py::TestMarkovState::test_markov_state_not_ergodic_no_stationary PASSED [ 67%]
-tests/test_markov_stability_analysis.py::TestMarkovSequence::test_markov_sequence_creation PASSED [ 68%]
-tests/test_markov_stability_analysis.py::TestMarkovSequence::test_markov_sequence_repr PASSED [ 69%]
-tests/test_markov_stability_analysis.py::TestMarkovStabilityAnalysis::test_analysis_creation PASSED [ 70%]
-tests/test_markov_stability_analysis.py::TestMarkovStabilityAnalysis::test_add_markov_chain PASSED [ 70%]
-tests/test_markov_stability_analysis.py::TestMarkovStabilityAnalysis::test_add_multiple_markov_chains PASSED [ 71%]
-tests/test_markov_stability_analysis.py::TestMarkovStabilityAnalysis::test_analyze_insufficient_states PASSED [ 72%]
-tests/test_markov_stability_analysis.py::TestMarkovStabilityAnalysis::test_analyze_simple_sequence PASSED [ 73%]
-tests/test_markov_stability_analysis.py::TestIrreducibilityEvolution::test_irreducibility_evolution_all_irreducible PASSED [ 74%]
-tests/test_markov_stability_analysis.py::TestIrreducibilityEvolution::test_irreducibility_evolution_becomes_irreducible PASSED [ 75%]
-tests/test_markov_stability_analysis.py::TestErgodicityEvolution::test_ergodicity_evolution_becomes_ergodic PASSED [ 76%]
-tests/test_markov_stability_analysis.py::TestStationaryStability::test_stationary_stability_identical_chains PASSED [ 77%]
-tests/test_markov_stability_analysis.py::TestStationaryStability::test_stationary_stability_changing_chains FAILED [ 78%]
-tests/test_markov_stability_analysis.py::TestStationaryStability::test_stationary_stability_no_ergodic_chains PASSED [ 79%]
-tests/test_markov_stability_analysis.py::TestLongestSequences::test_longest_sequence_monotone_growth FAILED [ 80%]
-tests/test_markov_stability_analysis.py::TestLongestSequences::test_sequence_monotone_irreducible_flag PASSED [ 80%]
-tests/test_markov_stability_analysis.py::TestWeatherExample::test_create_weather_markov_example PASSED [ 81%]
-tests/test_markov_stability_analysis.py::TestWeatherExample::test_weather_example_full_analysis PASSED [ 82%]
+tests/test_markov_chain.py::TestErgodicity::test_not_ergodic_periodic PASSED [ 51%]
+tests/test_markov_chain.py::TestStationaryDistribution::test_stationary_distribution_ergodic_chain PASSED [ 52%]
+tests/test_markov_chain.py::TestStationaryDistribution::test_stationary_distribution_not_ergodic PASSED [ 53%]
+tests/test_markov_chain.py::TestStationaryDistribution::test_stationary_distribution_empty_chain PASSED [ 54%]
+tests/test_markov_chain.py::TestStationaryDistribution::test_stationary_distribution_absorbing_state PASSED [ 55%]
+tests/test_markov_chain.py::TestTransitionModification::test_add_transition PASSED [ 56%]
+tests/test_markov_chain.py::TestTransitionModification::test_remove_transition PASSED [ 57%]
+tests/test_markov_chain.py::TestTransitionModification::test_add_transition_invalid_probability PASSED [ 58%]
+tests/test_markov_chain.py::TestTransitionModification::test_add_transition_nonexistent_state PASSED [ 59%]
+tests/test_markov_chain.py::TestMarkovChainCopy::test_copy_markov_chain PASSED [ 60%]
+tests/test_markov_chain.py::TestMarkovChainCopy::test_copy_is_independent PASSED [ 61%]
+tests/test_markov_chain.py::TestMarkovChainRepr::test_repr_ergodic PASSED [ 62%]
+tests/test_markov_chain.py::TestMarkovChainRepr::test_repr_not_ergodic PASSED [ 63%]
+tests/test_markov_chain.py::TestAdjacencyMatrixIntegration::test_to_adjacency_matrix PASSED [ 64%]
+tests/test_markov_chain.py::TestAdjacencyMatrixIntegration::test_adjacency_preserves_transitions PASSED [ 65%]
+tests/test_markov_stability_analysis.py::TestMarkovState::test_markov_state_creation PASSED [ 66%]
+tests/test_markov_stability_analysis.py::TestMarkovState::test_markov_state_post_init PASSED [ 66%]
+tests/test_markov_stability_analysis.py::TestMarkovState::test_markov_state_ergodic_computes_stationary PASSED [ 67%]
+tests/test_markov_stability_analysis.py::TestMarkovState::test_markov_state_not_ergodic_no_stationary PASSED [ 68%]
+tests/test_markov_stability_analysis.py::TestMarkovSequence::test_markov_sequence_creation PASSED [ 69%]
+tests/test_markov_stability_analysis.py::TestMarkovSequence::test_markov_sequence_repr PASSED [ 70%]
+tests/test_markov_stability_analysis.py::TestMarkovStabilityAnalysis::test_analysis_creation PASSED [ 71%]
+tests/test_markov_stability_analysis.py::TestMarkovStabilityAnalysis::test_add_markov_chain PASSED [ 72%]
+tests/test_markov_stability_analysis.py::TestMarkovStabilityAnalysis::test_add_multiple_markov_chains PASSED [ 73%]
+tests/test_markov_stability_analysis.py::TestMarkovStabilityAnalysis::test_analyze_insufficient_states PASSED [ 74%]
+tests/test_markov_stability_analysis.py::TestMarkovStabilityAnalysis::test_analyze_simple_sequence PASSED [ 75%]
+tests/test_markov_stability_analysis.py::TestIrreducibilityEvolution::test_irreducibility_evolution_all_irreducible PASSED [ 76%]
+tests/test_markov_stability_analysis.py::TestIrreducibilityEvolution::test_irreducibility_evolution_becomes_irreducible PASSED [ 77%]
+tests/test_markov_stability_analysis.py::TestErgodicityEvolution::test_ergodicity_evolution_becomes_ergodic PASSED [ 78%]
+tests/test_markov_stability_analysis.py::TestStationaryStability::test_stationary_stability_identical_chains PASSED [ 79%]
+tests/test_markov_stability_analysis.py::TestStationaryStability::test_stationary_stability_no_ergodic_chains PASSED [ 80%]
+tests/test_markov_stability_analysis.py::TestLongestSequences::test_longest_sequence_monotone_growth PASSED [ 81%]
+tests/test_markov_stability_analysis.py::TestLongestSequences::test_sequence_monotone_irreducible_flag PASSED [ 82%]
 tests/test_markov_stability_analysis.py::TestComparisonMatrix::test_comparison_matrix_dimensions PASSED [ 83%]
-tests/test_markov_stability_analysis.py::TestComparisonMatrix::test_comparison_matrix_diagonal_ones PASSED [ 84%]
-tests/test_markov_stability_analysis.py::TestComparisonMatrix::test_comparison_matrix_subgraph_relationship FAILED [ 85%]
-tests/test_markov_stability_analysis.py::TestPrintAnalysis::test_print_analysis_no_error PASSED [ 86%]
-tests/test_markov_stability_analysis.py::TestPrintAnalysis::test_print_analysis_with_sequences PASSED [ 87%]
-tests/test_transformation.py::TestTransformation::test_simple_transformation_creation PASSED [ 88%]
-tests/test_transformation.py::TestTransformation::test_transformation_with_creation PASSED [ 89%]
-tests/test_transformation.py::TestTransformation::test_transformation_with_deletion PASSED [ 90%]
+tests/test_markov_stability_analysis.py::TestComparisonMatrix::test_comparison_matrix_diagonal_ones PASSED [ 83%]
+tests/test_markov_stability_analysis.py::TestComparisonMatrix::test_comparison_matrix_subgraph_relationship PASSED [ 84%]
+tests/test_markov_stability_analysis.py::TestPrintAnalysis::test_print_analysis_no_error PASSED [ 85%]
+tests/test_markov_stability_analysis.py::TestPrintAnalysis::test_print_analysis_with_sequences PASSED [ 86%]
+tests/test_transformation.py::TestTransformation::test_simple_transformation_creation PASSED [ 87%]
+tests/test_transformation.py::TestTransformation::test_transformation_with_creation PASSED [ 88%]
+tests/test_transformation.py::TestTransformation::test_transformation_with_deletion PASSED [ 89%]
 tests/test_transformation.py::TestTransformation::test_invalid_transformation_black_nodes_mismatch PASSED [ 90%]
 tests/test_transformation.py::TestTransformation::test_invalid_transformation_red_on_right PASSED [ 91%]
 tests/test_transformation.py::TestTransformation::test_invalid_transformation_green_on_left PASSED [ 92%]
@@ -118,185 +114,6 @@ tests/test_transformation.py::TestTransformation::test_transformation_preserves_
 tests/test_transformation.py::TestTransformation::test_complex_transformation PASSED [ 99%]
 tests/test_transformation.py::TestTransformation::test_repr PASSED       [100%]
 
-=================================== FAILURES ===================================
-__________________ TestIrreducibility.test_irreducible_chain ___________________
-
-self = <test_markov_chain.TestIrreducibility object at 0x7b1b4b1c8710>
-
-    def test_irreducible_chain(self):
-        """Test: Irreduzible Kette"""
-        mc = MarkovChain(states=['A', 'B', 'C'])
-        P = np.array([
-            [0.0, 0.5, 0.5],
-            [0.5, 0.0, 0.5],
-            [0.5, 0.5, 0.0]
-        ])
-        mc.set_transition_matrix(P)
-    
->       assert mc.is_irreducible()
-E       assert np.False_
-E        +  where np.False_ = is_irreducible()
-E        +    where is_irreducible = MarkovChain(states=3, reducible, aperiodic, not ergodic).is_irreducible
-
-tests/test_markov_chain.py:163: AssertionError
-___________________ TestErgodicity.test_not_ergodic_periodic ___________________
-
-self = <test_markov_chain.TestErgodicity object at 0x7b1b4b197bc0>
-
-    def test_not_ergodic_periodic(self):
-        """Test: Nicht ergodisch wegen Periodizität"""
-        mc = MarkovChain(states=['A', 'B'])
-        P = np.array([
-            [0.0, 1.0],
-            [1.0, 0.0]
-        ])
-        mc.set_transition_matrix(P)
-    
->       assert mc.is_irreducible()
-E       assert np.False_
-E        +  where np.False_ = is_irreducible()
-E        +    where is_irreducible = MarkovChain(states=2, reducible, periodic, not ergodic).is_irreducible
-
-tests/test_markov_chain.py:286: AssertionError
-_________________ TestMarkovState.test_markov_state_post_init __________________
-
-self = <test_markov_stability_analysis.TestMarkovState object at 0x7b1b4b1cb5f0>
-
-    def test_markov_state_post_init(self):
-        """Test: Automatische Berechnung der Metriken"""
-        mc = MarkovChain(states=['A', 'B'])
-        P = np.array([[0.7, 0.3], [0.4, 0.6]])
-        mc.set_transition_matrix(P)
-    
-        state = MarkovState(
-            step=0,
-            timestamp=0.0,
-            markov_chain=mc
-        )
-    
-        # Sollte automatisch berechnet werden
-        assert state.transition_matrix is not None
-        assert state.adjacency_matrix is not None
->       assert isinstance(state.is_irreducible, bool)
-E       assert False
-E        +  where False = isinstance(np.True_, bool)
-E        +    where np.True_ = MarkovState(step=0, timestamp=0.0, markov_chain=MarkovChain(states=2, irreducible, aperiodic, ergodic), transformation_name=None, transition_matrix=array([[0.7, 0.3],\n       [0.4, 0.6]]), adjacency_matrix=array([[1, 1],\n       [1, 1]]), stationary_distribution=array([0.57142857, 0.42857143]), is_irreducible=np.True_, is_aperiodic=True, is_ergodic=True).is_irreducible
-
-tests/test_markov_stability_analysis.py:50: AssertionError
-______ TestStationaryStability.test_stationary_stability_changing_chains _______
-
-self = <test_markov_stability_analysis.TestStationaryStability object at 0x7b1b4ab016a0>
-
-    def test_stationary_stability_changing_chains(self):
-        """Test: Sich ändernde Ketten haben variierende π"""
-        analysis = MarkovStabilityAnalysis()
-    
-        # MC0
-        mc0 = MarkovChain(states=['A', 'B'])
-        P0 = np.array([[0.9, 0.1], [0.1, 0.9]])
-        mc0.set_transition_matrix(P0)
-        analysis.add_markov_chain(mc0)
-    
-        # MC1 - andere Übergangswahrscheinlichkeiten
-        mc1 = MarkovChain(states=['A', 'B'])
-        P1 = np.array([[0.3, 0.7], [0.7, 0.3]])
-        mc1.set_transition_matrix(P1)
-        analysis.add_markov_chain(mc1)
-    
-        result = analysis.analyze()
-        stat = result['stationary_stability']
-    
-        assert len(stat['l1_changes']) == 1
->       assert stat['l1_changes'][0] > 0.1  # Signifikante Änderung
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E       assert np.float64(0.0) > 0.1
-
-tests/test_markov_stability_analysis.py:300: AssertionError
------------------------------ Captured stdout call -----------------------------
-
-======================================================================
-MARKOV-KETTEN STABILITÄTSANALYSE
-======================================================================
-
-Vergleiche 2 Markov-Ketten paarweise...
-__________ TestLongestSequences.test_longest_sequence_monotone_growth __________
-
-self = <test_markov_stability_analysis.TestLongestSequences object at 0x7b1b4ab01ca0>
-
-    def test_longest_sequence_monotone_growth(self):
-        """Test: Monoton wachsende Sequenz"""
-        analysis = MarkovStabilityAnalysis()
-    
-        # MC0: Keine Übergänge
-        mc0 = MarkovChain(states=['A', 'B'])
-        P0 = np.array([[1.0, 0.0], [0.0, 1.0]])
-        mc0.set_transition_matrix(P0)
-        analysis.add_markov_chain(mc0)
-    
-        # MC1: Ein Übergang hinzugefügt
-        mc1 = MarkovChain(states=['A', 'B'])
-        P1 = np.array([[0.5, 0.5], [0.0, 1.0]])
-        mc1.set_transition_matrix(P1)
-        analysis.add_markov_chain(mc1)
-    
-        # MC2: Beide Richtungen
-        mc2 = MarkovChain(states=['A', 'B'])
-        P2 = np.array([[0.5, 0.5], [0.5, 0.5]])
-        mc2.set_transition_matrix(P2)
-        analysis.add_markov_chain(mc2)
-    
-        result = analysis.analyze()
-        sequences = result['longest_sequences']
-    
-        assert len(sequences) > 0
-        # Sollte eine Sequenz der Länge 3 finden
->       assert any(seq.length == 3 for seq in sequences)
-E       assert False
-E        +  where False = any(<generator object TestLongestSequences.test_longest_sequence_monotone_growth.<locals>.<genexpr> at 0x7b1b36f2f100>)
-
-tests/test_markov_stability_analysis.py:350: AssertionError
------------------------------ Captured stdout call -----------------------------
-
-======================================================================
-MARKOV-KETTEN STABILITÄTSANALYSE
-======================================================================
-
-Vergleiche 3 Markov-Ketten paarweise...
-______ TestComparisonMatrix.test_comparison_matrix_subgraph_relationship _______
-
-self = <test_markov_stability_analysis.TestComparisonMatrix object at 0x7b1b4ab01b50>
-
-    def test_comparison_matrix_subgraph_relationship(self):
-        """Test: Subgraph-Beziehungen in Matrix"""
-        analysis = MarkovStabilityAnalysis()
-    
-        # MC0: Wenige Übergänge
-        mc0 = MarkovChain(states=['A', 'B'])
-        P0 = np.array([[1.0, 0.0], [0.0, 1.0]])
-        mc0.set_transition_matrix(P0)
-        analysis.add_markov_chain(mc0)
-    
-        # MC1: Mehr Übergänge (Subgraph von MC0)
-        mc1 = MarkovChain(states=['A', 'B'])
-        P1 = np.array([[0.5, 0.5], [0.5, 0.5]])
-        mc1.set_transition_matrix(P1)
-        analysis.add_markov_chain(mc1)
-    
-        result = analysis.analyze()
-        matrix = result['comparison_matrix']
-    
-        # MC0 sollte Subgraph von MC1 sein
->       assert matrix[0, 1] == 1
-E       assert np.int64(0) == 1
-
-tests/test_markov_stability_analysis.py:469: AssertionError
------------------------------ Captured stdout call -----------------------------
-
-======================================================================
-MARKOV-KETTEN STABILITÄTSANALYSE
-======================================================================
-
-Vergleiche 2 Markov-Ketten paarweise...
 ================================ tests coverage ================================
 _______________ coverage: platform linux, python 3.12.3-final-0 ________________
 
@@ -304,19 +121,12 @@ Name                               Stmts   Miss  Cover   Missing
 ----------------------------------------------------------------
 src/__init__.py                        0      0   100%
 src/graph.py                         114      4    96%   19, 23, 40, 87
-src/markov_chain.py                  141      6    96%   154, 222-229
-src/markov_stability_analysis.py     195     18    91%   262, 302, 352-382
+src/markov_chain.py                  141      1    99%   162
+src/markov_stability_analysis.py     195     30    85%   265, 305, 321-351, 355-385
 src/simulate_traffic_light.py        130    130     0%   8-226
 src/system_stability_analysis.py     245    245     0%   10-436
 src/transformation.py                 56      4    93%   141, 146-147, 152
 ----------------------------------------------------------------
-TOTAL                                881    407    54%
+TOTAL                                881    414    53%
 Coverage HTML written to dir doc/htmlcov
-=========================== short test summary info ============================
-FAILED tests/test_markov_chain.py::TestIrreducibility::test_irreducible_chain
-FAILED tests/test_markov_chain.py::TestErgodicity::test_not_ergodic_periodic
-FAILED tests/test_markov_stability_analysis.py::TestMarkovState::test_markov_state_post_init
-FAILED tests/test_markov_stability_analysis.py::TestStationaryStability::test_stationary_stability_changing_chains
-FAILED tests/test_markov_stability_analysis.py::TestLongestSequences::test_longest_sequence_monotone_growth
-FAILED tests/test_markov_stability_analysis.py::TestComparisonMatrix::test_comparison_matrix_subgraph_relationship
-======================== 6 failed, 104 passed in 0.61s =========================
+============================= 106 passed in 0.60s ==============================

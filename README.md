@@ -161,12 +161,68 @@ analysis = sim.analyze_stability()
 sim.print_analysis(analysis)
 ```
 
+## Markov-Ketten Analyse (v3.0.0)
+
+### Neue Funktionalität
+
+Version 3.0.0 erweitert den Subgraph-Algorithmus um eine vollständige Markov-Ketten Implementierung mit Stabilitätsanalyse. Diese Erweiterung ermöglicht die Analyse dynamischer Systeme durch die Evolution ihrer Übergangsmatrizen.
+
+### Markov-Ketten Grundlagen
+
+Eine **Markov-Kette** ist ein stochastischer Prozess, bei dem die Wahrscheinlichkeit des nächsten Zustands nur vom aktuellen Zustand abhängt (Markov-Eigenschaft).
+
+**Repräsentation**:
+- **Zustände**: Knoten im Graph
+- **Übergänge**: Gerichtete Kanten mit Übergangswahrscheinlichkeiten
+- **Übergangsmatrix** $P$: $P_{ij}$ = Wahrscheinlichkeit von Zustand $i$ nach $j$
+
+**Eigenschaften**:
+- **Irreduzibel**: Alle Zustände sind voneinander erreichbar (über beliebige Pfade)
+- **Aperiodisch**: Alle Zustände haben Periode 1 (keine zyklischen Strukturen)
+- **Ergodisch**: Irreduzibel und aperiodisch
+- **Stationäre Verteilung** $\pi$: $\pi P = \pi$ (existiert für ergodische Ketten)
+
+### Implementierung
+
+#### MarkovChain Klasse
+
+Erweitert die `Graph`-Klasse um Markov-Ketten spezifische Funktionalität:
+
+```python
+from markov_chain import MarkovChain
+import numpy as np
+
+# Definiere Zustände
+states = ['sonnig', 'bewölkt', 'regnerisch']
+
+# Definiere Übergangsmatrix
+P = np.array([
+    [0.7, 0.2, 0.1],  # von sonnig
+    [0.3, 0.4, 0.3],  # von bewölkt
+    [0.2, 0.3, 0.5]   # von regnerisch
+])
+
+# Erstelle Markov-Kette
+mc = MarkovChain(states=states, transition_matrix=P)
+
+# Überprüfe Eigenschaften
+print(f"Irreduzibel: {mc.is_irreducible()}")
+print(f"Aperiodisch: {mc.is_aperiodic()}")
+print(f"Ergodisch: {mc.is_ergodic()}")
+
+# Berechne stationäre Verteilung
+if mc.is_ergodic():
+    pi = mc.compute_stationary_distribution()
+    print(f"Stationäre Verteilung: {pi}")
+```
+
 ## Beispiele
 
 Das Repository enthält folgende Beispiele:
 
 - **`simulate_traffic_light.py`**: Vollständige Simulation einer Ampelkreuzung mit Zustandsübergängen
 - **`system_stability_analysis.py`**: Stabilitätsanalyse mit Subgraph-Algorithmus (demonstriert am Ampelsystem)
+- **`marcov_stability_analysis.py`**: Stabilitätsanalyse für Markov-Ketten
 
 ## Kontakt
 

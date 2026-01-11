@@ -106,13 +106,21 @@ class MarkovChain(Graph):
         if n == 0:
             return True
         
-        # Berechne Erreichbarkeitsmatrix
-        reachability = matrix.copy()
-        for _ in range(n - 1):
-            reachability = np.minimum(reachability + matrix, 1)
+        if n == 1:
+            return True
         
-        # Alle Einträge müssen > 0 sein
-        return np.all(reachability > 0)
+        # Floyd-Warshall Algorithmus für Erreichbarkeit
+        # reachability[i][j] = 1 wenn es einen Pfad von i nach j gibt
+        reachability = matrix.copy()
+        
+        for k in range(n):
+            for i in range(n):
+                for j in range(n):
+                    if reachability[i][k] and reachability[k][j]:
+                        reachability[i][j] = 1
+        
+        # Alle Einträge müssen 1 sein (jeder Zustand von jedem erreichbar)
+        return bool(np.all(reachability == 1))
     
     def get_period(self, state: Optional[str] = None) -> int:
         """
@@ -207,24 +215,16 @@ class MarkovChain(Graph):
         
         P = self.get_transition_matrix()
         
-        # Power Iteration Methode
-        pi = np.ones(n) / n  # Startverteilung
-        
-        for _ in range(max_iterations):
-            pi_new = pi @ P
-            
-            if np.linalg.norm(pi_new - pi, 1) < tolerance:
-                return pi_new
-            
-            pi = pi_new
-        
-        # Falls nicht konvergiert, versuche Eigenwert-Methode
+        # Eigenvalue method (more reliable than power iteration)
         eigenvalues, eigenvectors = np.linalg.eig(P.T)
         
-        # Finde Eigenvektor zu Eigenwert 1
+        # Find eigenvector for eigenvalue 1
         idx = np.argmin(np.abs(eigenvalues - 1.0))
         pi = np.real(eigenvectors[:, idx])
-        pi = pi / pi.sum()  # Normalisiere
+        
+        # Normalize (ensure all values are positive)
+        pi = np.abs(pi)
+        pi = pi / pi.sum()
         
         return pi
     

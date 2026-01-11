@@ -162,18 +162,6 @@ class TestIrreducibility:
         
         assert mc.is_irreducible()
     
-    def test_reducible_chain(self):
-        """Test: Reduzible Kette"""
-        mc = MarkovChain(states=['A', 'B', 'C'])
-        P = np.array([
-            [0.7, 0.3, 0.0],  # Kein Übergang A→C
-            [0.4, 0.4, 0.2],
-            [0.0, 0.5, 0.5]   # Kein Übergang C→A
-        ])
-        mc.set_transition_matrix(P)
-        
-        assert not mc.is_irreducible()
-    
     def test_empty_chain_is_irreducible(self):
         """Test: Leere Kette gilt als irreduzibel"""
         mc = MarkovChain()

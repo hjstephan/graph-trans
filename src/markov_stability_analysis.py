@@ -32,9 +32,10 @@ class MarkovState:
         if self.adjacency_matrix is None:
             self.adjacency_matrix, _ = self.markov_chain.to_adjacency_matrix()
         
-        self.is_irreducible = self.markov_chain.is_irreducible()
-        self.is_aperiodic = self.markov_chain.is_aperiodic()
-        self.is_ergodic = self.markov_chain.is_ergodic()
+        # Convert numpy bools to Python bools
+        self.is_irreducible = bool(self.markov_chain.is_irreducible())
+        self.is_aperiodic = bool(self.markov_chain.is_aperiodic())
+        self.is_ergodic = bool(self.markov_chain.is_ergodic())
         
         if self.is_ergodic:
             self.stationary_distribution = \
@@ -108,20 +109,22 @@ class MarkovStabilityAnalysis:
                 if i == j:
                     comparison_matrix[i][j] = 1
                 else:
-                    decision, _ = self.subgraph_algo.compare_graphs(
+                    decision, _ = self.subgraph_algo.compare_graphs_with_adj_list(
                         self.states[i].adjacency_matrix,
                         self.states[j].adjacency_matrix
                     )
+                    # MC_i ist Subgraph von MC_j wenn decision "keep_B" ist
+                    # (B ist states[j], also hat MC_j mehr/gleich Kanten wie MC_i)
                     if decision in ["keep_B", "equal", "equal_keep_B"]:
                         comparison_matrix[i][j] = 1
         
         # Finde längste Subgraph-Sequenzen
         sequences = self._find_longest_sequences(comparison_matrix)
         
-        # Analysiere Irreduzibilitäts-Evolution
+        # Analysiere Irreduzibilität-Evolution
         irreducibility_evolution = self._analyze_irreducibility_evolution()
         
-        # Analysiere Ergodizitäts-Evolution
+        # Analysiere Ergodizität-Evolution
         ergodicity_evolution = self._analyze_ergodicity_evolution()
         
         # Analysiere Stabilität stationärer Verteilungen
@@ -262,7 +265,7 @@ class MarkovStabilityAnalysis:
             print("Keine Sequenzen gefunden.")
         
         print("\n" + "-"*70)
-        print("IRREDUZIBILITÄTS-EVOLUTION")
+        print("IRREDUZIBILITÄT-EVOLUTION")
         print("-"*70)
         
         irr = analysis['irreducibility_evolution']
@@ -272,7 +275,7 @@ class MarkovStabilityAnalysis:
         print(f"Immer irreduzibel: {irr['always_irreducible']}")
         
         print("\n" + "-"*70)
-        print("ERGODIZITÄTS-EVOLUTION")
+        print("ERGODIZITÄT-EVOLUTION")
         print("-"*70)
         
         erg = analysis['ergodicity_evolution']
