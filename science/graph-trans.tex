@@ -646,6 +646,33 @@ Die Systemstabilitätsanalyse lässt sich erfolgreich auf Markov-Ketten anwenden
 
 Die Kombination von Markov-Theorie und Graphtransformationen eröffnet neue Mög-lichkeiten für die Analyse stochastischer Systeme, insbesondere im Bereich der Perfor-mance-Modellierung, Zuverlässigkeitsanalyse und adaptiven Systeme.
 
+
+\section{Softwaresysteme}
+
+Softwaresysteme sind heute in vielen Bereichen des Alltags notwendig für die erfolgreiche und zuverlässige Ausführung unterschiedlicher Abläufe und Aufgaben. In diesem Kapitel wird das Softwaresystem definiert und in seinen Eigenschaften betrachtet.
+
+\begin{definition}[Softwaresystem]
+	Ein Softwaresystem $M$ besteht aus einer Menge von Zuständen $Q$, die miteinander verbunden sind und auf Eingaben für das Softwaresystem reagieren.
+\end{definition}
+
+\begin{definition}[Sprache eines Softwaresystems]
+	Die Sprache eines Softwaresystems $L(M)$ enthält alle Worte, die durch die Verbindung der Zustände durch die Eingabe für das Softwaresystem erzeugt werden.
+\end{definition}
+
+\begin{definition}[Dynamisches Softwaresystem]
+	Ein Softwaresystem $M$ ist dynamisch, wenn der aktuelle Zustand $Q_{t}$, in dem sich $M$ zum Zeitpunkt $t$ befindet, abhängt von mindestens einem Zeitpunkt $t-1$ und mindestens einem Zustand $Q_{t-1}'$ mit $Q'_{t-1} \neq Q_{t}$.
+\end{definition}
+
+\begin{definition}[Minimales Softwaresystem]
+	Ein Softwaresystem $M$ ist minimal, wenn durch Wegnahme eines weiteren Zustandes $Q$ die Sprache $L(M)$ verändert wird.
+\end{definition}
+Von besonderem Interesse sind nur die Zustände eines Softwaresystems $M$, die den \textit{Kern} des Softwaresystems bilden, ohne dabei $L(M)$ zu verändern. Minimal dynamische Softwaresysteme haben den Vorteil, dass sie leichter änderbar sind. Veränderungen an Zuständen wird dadurch weniger die Möglichkeit gegeben, die Sprache $L(M)$ zu verändern entgegen der eigentlichen Spezifikation.
+
+\begin{definition}[Verifizierbarkeit von Softwaresystemen]
+	Zwei Softwaresysteme $M$ und $M'$ sind verifizierbar auf $L(M) = L(M')$, wenn $M$ und $M'$ minimal sind.
+\end{definition}
+Dadurch, dass bei der Verifikation nur noch der entscheidende Kern von Zuständen sowohl bei $M$ und $M'$ betrachtet werden muss, ist die Verifikation beider Systeme $M$ und $M'$ effizient möglich.
+
 \section{Zusammenfassung}
 
 Die vorliegende Arbeit präsentiert eine umfassende Methodik zur Systemstabilitätsanalyse durch Graphtransformationen. Im Zentrum steht die Verbindung von formaler Graphtheorie, effizienten Algorithmen und praktischer Anwendbarkeit auf unterschiedliche Systemtypen.
