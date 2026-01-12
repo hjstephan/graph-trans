@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="graph-trans",
-    version="3.0.0",
+    version="3.1.0",
     author="Stephan Epp",
     author_email="hjstephan@gmail.com",
     description="Framework für Graphtransformationen und Systemstabilitätsanalysen",

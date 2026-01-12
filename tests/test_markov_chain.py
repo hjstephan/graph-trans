@@ -162,6 +162,22 @@ class TestIrreducibility:
         
         assert mc.is_irreducible()
     
+    def test_reducible_chain(self):
+        """Test: Reduzible Kette mit absorbierendem Zustand"""
+        mc = MarkovChain(states=['A', 'B', 'C'])
+        # C ist absorbierend - kann von A,B erreicht werden, aber C kann nicht zurück
+        P = np.array([
+            [0.5, 0.5, 0.0],  # A kann zu A, B
+            [0.0, 0.7, 0.3],  # B kann zu B, C (nicht zu A!)
+            [0.0, 0.0, 1.0]   # C ist absorbierend (nur C→C)
+        ])
+        mc.set_transition_matrix(P)
+        
+        # Diese Kette ist NICHT irreduzibel weil:
+        # - C ist von A,B erreichbar (A→B→C)
+        # - Aber A ist NICHT von C erreichbar (kein Pfad C→A)
+        assert not mc.is_irreducible()
+
     def test_empty_chain_is_irreducible(self):
         """Test: Leere Kette gilt als irreduzibel"""
         mc = MarkovChain()
