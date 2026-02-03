@@ -4,7 +4,7 @@ markov_chain.py - Markov-Ketten Implementierung basierend auf Graph-Klasse
 
 from typing import List, Dict, Optional, Tuple
 import numpy as np
-from graph import Graph, Node, Edge
+from .graph import Graph, Node, Edge
 
 
 class MarkovChain(Graph):

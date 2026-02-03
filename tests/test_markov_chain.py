@@ -4,7 +4,7 @@ test_markov_chain.py - Tests für die MarkovChain-Klasse
 
 import pytest
 import numpy as np
-from markov_chain import MarkovChain
+from src.markov_chain import MarkovChain
 
 
 class TestMarkovChainCreation:

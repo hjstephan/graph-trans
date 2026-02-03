@@ -3,7 +3,7 @@ Tests für die Graph-Klasse
 """
 
 import pytest
-from graph import Graph, Node, Edge
+from src.graph import Graph, Node, Edge
 
 
 class TestNode:

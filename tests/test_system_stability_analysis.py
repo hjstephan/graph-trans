@@ -5,9 +5,9 @@ test_system_stability_analysis.py - Tests für Systemstabilitätsanalyse
 import pytest
 import numpy as np
 from unittest.mock import patch, MagicMock
-from graph import Graph
-from transformation import Transformation
-from system_stability_analysis import (
+from src.graph import Graph
+from src.transformation import Transformation
+from src.system_stability_analysis import (
     SystemState,
     SubgraphSequence,
     SystemSimulation,
@@ -169,7 +169,7 @@ class TestSystemSimulation:
 class TestSystemSimulationRun:
     """Tests für SystemSimulation.run()"""
     
-    @patch('system_stability_analysis.time.sleep')
+    @patch('src.system_stability_analysis.time.sleep')
     def test_run_creates_initial_state(self, mock_sleep):
         """Test: run() erstellt Anfangszustand"""
         sim = SystemSimulation()
@@ -183,7 +183,7 @@ class TestSystemSimulationRun:
         assert states[0].step == 0
         assert states[0].transformation_name == "Initial"
     
-    @patch('system_stability_analysis.time.sleep')
+    @patch('src.system_stability_analysis.time.sleep')
     def test_run_applies_transformations(self, mock_sleep):
         """Test: run() wendet Transformationen an"""
         sim = SystemSimulation()
@@ -214,7 +214,7 @@ class TestSystemSimulationRun:
         assert states[1].step == 1
         assert states[1].transformation_name == 'A→B to A→C'
     
-    @patch('system_stability_analysis.time.sleep')
+    @patch('src.system_stability_analysis.time.sleep')
     def test_run_cycles_through_transformations(self, mock_sleep):
         """Test: run() zykliert durch Transformationen"""
         sim = SystemSimulation()
@@ -241,7 +241,7 @@ class TestSystemSimulationRun:
         assert states[3].transformation_name == 'T1'
         assert states[4].transformation_name == 'T2'
     
-    @patch('system_stability_analysis.time.sleep')
+    @patch('src.system_stability_analysis.time.sleep')
     def test_run_respects_delay(self, mock_sleep):
         """Test: run() berücksichtigt Verzögerung"""
         sim = SystemSimulation()
@@ -263,7 +263,7 @@ class TestSystemSimulationRun:
         assert mock_sleep.call_count == 3
         mock_sleep.assert_called_with(0.5)
     
-    @patch('system_stability_analysis.time.sleep')
+    @patch('src.system_stability_analysis.time.sleep')
     def test_run_handles_transformation_error(self, mock_sleep, capsys):
         """Test: run() behandelt Transformationsfehler"""
         sim = SystemSimulation()
@@ -288,7 +288,7 @@ class TestSystemSimulationRun:
         # Nur Initial-State wurde hinzugefügt
         assert len(states) == 1
     
-    @patch('system_stability_analysis.time.sleep')
+    @patch('src.system_stability_analysis.time.sleep')
     def test_run_stores_graph_copies(self, mock_sleep):
         """Test: run() speichert Kopien der Graphen"""
         sim = SystemSimulation()
@@ -542,7 +542,7 @@ class TestFindCycles:
 class TestAnalyzeStability:
     """Tests für analyze_stability()"""
     
-    @patch('system_stability_analysis.time.sleep')
+    @patch('src.system_stability_analysis.time.sleep')
     def test_analyze_with_sufficient_states(self, mock_sleep, capsys):
         """Test: Analyse mit genügend Zuständen"""
         sim = SystemSimulation()
@@ -581,7 +581,7 @@ class TestAnalyzeStability:
         assert "error" in result
         assert "Nicht genug" in result["error"]
     
-    @patch('system_stability_analysis.time.sleep')
+    @patch('src.system_stability_analysis.time.sleep')
     def test_analyze_creates_comparison_matrix(self, mock_sleep):
         """Test: Analyse erstellt Vergleichsmatrix"""
         sim = SystemSimulation()
@@ -610,7 +610,7 @@ class TestAnalyzeStability:
 class TestPrintAnalysis:
     """Tests für print_analysis()"""
     
-    @patch('system_stability_analysis.time.sleep')
+    @patch('src.system_stability_analysis.time.sleep')
     def test_prints_all_sections(self, mock_sleep, capsys):
         """Test: Druckt alle Abschnitte"""
         sim = SystemSimulation()
@@ -732,7 +732,7 @@ class TestCreateTrafficLightSystem:
 class TestIntegration:
     """Integrationstests"""
     
-    @patch('system_stability_analysis.time.sleep')
+    @patch('src.system_stability_analysis.time.sleep')
     def test_full_traffic_light_simulation(self, mock_sleep, capsys):
         """Test: Vollständige Ampelsimulation"""
         initial, transformations = create_traffic_light_system()
@@ -752,7 +752,7 @@ class TestIntegration:
         assert result['total_states'] == 9
         assert 'comparison_matrix' in result
     
-    @patch('system_stability_analysis.time.sleep')
+    @patch('src.system_stability_analysis.time.sleep')
     def test_finds_cycle_in_traffic_light(self, mock_sleep):
         """Test: Findet Zyklus in Ampel"""
         initial, transformations = create_traffic_light_system()
@@ -771,7 +771,7 @@ class TestIntegration:
         # Schritt 0 (grün) == Schritt 4 (grün) == Schritt 8 (grün)
         assert len(cycles) > 0
     
-    @patch('system_stability_analysis.time.sleep')
+    @patch('src.system_stability_analysis.time.sleep')
     def test_print_complete_analysis(self, mock_sleep, capsys):
         """Test: Vollständige Analyse-Ausgabe"""
         initial, transformations = create_traffic_light_system()

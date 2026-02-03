@@ -6,8 +6,8 @@ import pytest
 import io
 import sys
 from unittest.mock import patch
-from graph import Graph
-from simulate_traffic_light import (
+from src.graph import Graph
+from src.simulate_traffic_light import (
     create_initial_state,
     create_green_to_yellow,
     create_yellow_to_red,
@@ -192,7 +192,7 @@ class TestPrintGraphState:
 class TestRunSimulation:
     """Tests für run_simulation"""
     
-    @patch('simulate_traffic_light.time.sleep')
+    @patch('src.simulate_traffic_light.time.sleep')
     def test_runs_complete_cycle(self, mock_sleep, capsys):
         """Test: Führt vollständigen Zyklus aus"""
         run_simulation(cycles=1, delay=0.0)
@@ -206,7 +206,7 @@ class TestRunSimulation:
         assert "Rot-Gelb → Grün" in captured.out
         assert "Simulation abgeschlossen" in captured.out
     
-    @patch('simulate_traffic_light.time.sleep')
+    @patch('src.simulate_traffic_light.time.sleep')
     def test_runs_multiple_cycles(self, mock_sleep, capsys):
         """Test: Führt mehrere Zyklen aus"""
         run_simulation(cycles=2, delay=0.0)
@@ -217,7 +217,7 @@ class TestRunSimulation:
         assert "ZYKLUS 1" in captured.out
         assert "ZYKLUS 2" in captured.out
     
-    @patch('simulate_traffic_light.time.sleep')
+    @patch('src.simulate_traffic_light.time.sleep')
     def test_respects_delay(self, mock_sleep):
         """Test: Berücksichtigt Verzögerung"""
         run_simulation(cycles=1, delay=0.5)
@@ -226,7 +226,7 @@ class TestRunSimulation:
         assert mock_sleep.call_count == 4
         mock_sleep.assert_called_with(0.5)
     
-    @patch('simulate_traffic_light.time.sleep')
+    @patch('src.simulate_traffic_light.time.sleep')
     def test_shows_initial_state(self, mock_sleep, capsys):
         """Test: Zeigt Anfangszustand"""
         run_simulation(cycles=1, delay=0.0)
@@ -235,7 +235,7 @@ class TestRunSimulation:
         assert "ANFANGSZUSTAND" in captured.out
         assert "Grün" in captured.out
     
-    @patch('simulate_traffic_light.time.sleep')
+    @patch('src.simulate_traffic_light.time.sleep')
     def test_shows_transformation_success(self, mock_sleep, capsys):
         """Test: Zeigt Transformations-Erfolg"""
         run_simulation(cycles=1, delay=0.0)
@@ -243,8 +243,8 @@ class TestRunSimulation:
         captured = capsys.readouterr()
         assert "✅ Transformation erfolgreich angewendet" in captured.out
     
-    @patch('simulate_traffic_light.Transformation.apply')
-    @patch('simulate_traffic_light.time.sleep')
+    @patch('src.simulate_traffic_light.Transformation.apply')
+    @patch('src.simulate_traffic_light.time.sleep')
     def test_handles_transformation_error(self, mock_sleep, mock_apply, capsys):
         """Test: Behandelt Transformations-Fehler"""
         # Lasse die erste Anwendung einen Fehler werfen
@@ -256,7 +256,7 @@ class TestRunSimulation:
         assert "❌ Fehler" in captured.out
         assert "Test error" in captured.out
     
-    @patch('simulate_traffic_light.time.sleep')
+    @patch('src.simulate_traffic_light.time.sleep')
     def test_zero_cycles(self, mock_sleep, capsys):
         """Test: Null Zyklen"""
         run_simulation(cycles=0, delay=0.0)
@@ -364,7 +364,7 @@ class TestEdgeCases:
         assert "node1" in captured.out
         assert "node2" in captured.out
     
-    @patch('simulate_traffic_light.time.sleep')
+    @patch('src.simulate_traffic_light.time.sleep')
     def test_large_number_of_cycles(self, mock_sleep, capsys):
         """Test: Große Anzahl von Zyklen"""
         run_simulation(cycles=10, delay=0.0)
@@ -379,7 +379,7 @@ class TestEdgeCases:
 class TestIntegration:
     """Integrationstests"""
     
-    @patch('simulate_traffic_light.time.sleep')
+    @patch('src.simulate_traffic_light.time.sleep')
     def test_complete_simulation_output(self, mock_sleep, capsys):
         """Test: Vollständige Simulations-Ausgabe"""
         run_simulation(cycles=1, delay=0.0)

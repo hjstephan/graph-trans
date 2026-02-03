@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for src/markov_stability_analysis.py: 85%</title>
+    <title>Coverage for src/markov_stability_analysis.py: 92%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
     <link rel="stylesheet" href="style_cb_9ff733b0.css" type="text/css">
     <script src="coverage_html_cb_dd2e7eb5.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>src&#8201;/&#8201;markov_stability_analysis.py</b>:
-            <span class="pc_cov">85%</span>
+            <span class="pc_cov">92%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -54,10 +54,10 @@
             </div>
         </aside>
         <h2>
-            <span class="text">195 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">165<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">30<span class="text"> missing</span></button>
-            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
+            <span class="text">176 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">162<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">14<span class="text"> missing</span></button>
+            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">20<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
             <a id="prevFileLink" class="nav" href="z_145eef247bfb46b6_markov_chain_py.html">&#xab; prev</a> &nbsp; &nbsp;
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_145eef247bfb46b6_simulate_traffic_light_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.13.1">coverage.py v7.13.1</a>,
-            created at 2026-01-12 14:25 +0100
+            created at 2026-02-04 03:32 +0100
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -88,8 +88,8 @@
     <p class="run"><span class="n"><a id="t6" href="#t6">6</a></span><span class="t"><span class="key">import</span> <span class="nam">numpy</span> <span class="key">as</span> <span class="nam">np</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t7" href="#t7">7</a></span><span class="t"><span class="key">from</span> <span class="nam">typing</span> <span class="key">import</span> <span class="nam">List</span><span class="op">,</span> <span class="nam">Dict</span><span class="op">,</span> <span class="nam">Optional</span><span class="op">,</span> <span class="nam">Tuple</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t8" href="#t8">8</a></span><span class="t"><span class="key">from</span> <span class="nam">dataclasses</span> <span class="key">import</span> <span class="nam">dataclass</span><span class="op">,</span> <span class="nam">field</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t9" href="#t9">9</a></span><span class="t"><span class="key">from</span> <span class="nam">markov_chain</span> <span class="key">import</span> <span class="nam">MarkovChain</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t"><span class="key">from</span> <span class="nam">subgraph</span> <span class="key">import</span> <span class="nam">Subgraph</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t9" href="#t9">9</a></span><span class="t"><span class="key">from</span> <span class="op">.</span><span class="nam">markov_chain</span> <span class="key">import</span> <span class="nam">MarkovChain</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t"><span class="key">from</span> <span class="nam">src</span><span class="op">.</span><span class="nam">subgraph</span> <span class="key">import</span> <span class="nam">Subgraph</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t11" href="#t11">11</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t12" href="#t12">12</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t13" href="#t13">13</a></span><span class="t"><span class="op">@</span><span class="nam">dataclass</span>&nbsp;</span><span class="r"></span></p>
@@ -133,9 +133,9 @@
     <p class="run"><span class="n"><a id="t51" href="#t51">51</a></span><span class="t">    <span class="nam">states</span><span class="op">:</span> <span class="nam">List</span><span class="op">[</span><span class="nam">MarkovState</span><span class="op">]</span> <span class="op">=</span> <span class="nam">field</span><span class="op">(</span><span class="nam">default_factory</span><span class="op">=</span><span class="nam">list</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t52" href="#t52">52</a></span><span class="t">    <span class="nam">is_monotone_irreducible</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t53" href="#t53">53</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t54" href="#t54">54</a></span><span class="t">    <span class="key">def</span> <span class="nam">__repr__</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t55" href="#t55">55</a></span><span class="t">        <span class="key">return</span> <span class="op">(</span><span class="fst">f"</span><span class="fst">MarkovSequence(steps=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">start_step</span><span class="op">}</span><span class="fst">-</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">end_step</span><span class="op">}</span><span class="fst">, </span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t56" href="#t56">56</a></span><span class="t">                <span class="fst">f"</span><span class="fst">length=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">length</span><span class="op">}</span><span class="fst">, monotone_irreducible=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">is_monotone_irreducible</span><span class="op">}</span><span class="fst">)</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t54" href="#t54">54</a></span><span class="t">    <span class="key">def</span> <span class="nam">__repr__</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t55" href="#t55">55</a></span><span class="t">        <span class="key">return</span> <span class="op">(</span><span class="fst">f"</span><span class="fst">MarkovSequence(steps=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">start_step</span><span class="op">}</span><span class="fst">-</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">end_step</span><span class="op">}</span><span class="fst">, </span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t56" href="#t56">56</a></span><span class="t">                <span class="fst">f"</span><span class="fst">length=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">length</span><span class="op">}</span><span class="fst">, monotone_irreducible=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">is_monotone_irreducible</span><span class="op">}</span><span class="fst">)</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t57" href="#t57">57</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t58" href="#t58">58</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t59" href="#t59">59</a></span><span class="t"><span class="key">class</span> <span class="nam">MarkovStabilityAnalysis</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -433,38 +433,38 @@
     <p class="mis show_mis"><span class="n"><a id="t351" href="#t351">351</a></span><span class="t">    <span class="key">return</span> <span class="nam">chains</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t352" href="#t352">352</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t353" href="#t353">353</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t354" href="#t354">354</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span> <span class="op">==</span> <span class="str">"__main__"</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t355" href="#t355">355</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"="</span><span class="op">*</span><span class="num">70</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t356" href="#t356">356</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"MARKOV-KETTEN STABILIT&#196;TSANALYSE - WETTER BEISPIEL"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t357" href="#t357">357</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"="</span><span class="op">*</span><span class="num">70</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t354" href="#t354">354</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span> <span class="op">==</span> <span class="str">"__main__"</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t355" href="#t355">355</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"="</span><span class="op">*</span><span class="num">70</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t356" href="#t356">356</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"MARKOV-KETTEN STABILIT&#196;TSANALYSE - WETTER BEISPIEL"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t357" href="#t357">357</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"="</span><span class="op">*</span><span class="num">70</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t358" href="#t358">358</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t359" href="#t359">359</a></span><span class="t">    <span class="com"># Erstelle Markov-Ketten Sequenz</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t360" href="#t360">360</a></span><span class="t">    <span class="nam">chains</span> <span class="op">=</span> <span class="nam">create_weather_markov_example</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t360" href="#t360">360</a></span><span class="t">    <span class="nam">chains</span> <span class="op">=</span> <span class="nam">create_weather_markov_example</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t361" href="#t361">361</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t362" href="#t362">362</a></span><span class="t">    <span class="com"># Initialisiere Analyse</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t363" href="#t363">363</a></span><span class="t">    <span class="nam">analysis</span> <span class="op">=</span> <span class="nam">MarkovStabilityAnalysis</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t363" href="#t363">363</a></span><span class="t">    <span class="nam">analysis</span> <span class="op">=</span> <span class="nam">MarkovStabilityAnalysis</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t364" href="#t364">364</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t365" href="#t365">365</a></span><span class="t">    <span class="nam">transformation_names</span> <span class="op">=</span> <span class="op">[</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis mis2 show_mis"><span class="n"><a id="t366" href="#t366">366</a></span><span class="t">        <span class="str">"Initial (MC_0)"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis mis2 show_mis"><span class="n"><a id="t367" href="#t367">367</a></span><span class="t">        <span class="str">"Hinzuf&#252;gen: sonnig&#8594;regnerisch (MC_1)"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis mis2 show_mis"><span class="n"><a id="t368" href="#t368">368</a></span><span class="t">        <span class="str">"Hinzuf&#252;gen: regnerisch&#8594;sonnig (MC_2)"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis mis2 show_mis"><span class="n"><a id="t369" href="#t369">369</a></span><span class="t">    <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t365" href="#t365">365</a></span><span class="t">    <span class="nam">transformation_names</span> <span class="op">=</span> <span class="op">[</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc exc2 show_exc"><span class="n"><a id="t366" href="#t366">366</a></span><span class="t">        <span class="str">"Initial (MC_0)"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc exc2 show_exc"><span class="n"><a id="t367" href="#t367">367</a></span><span class="t">        <span class="str">"Hinzuf&#252;gen: sonnig&#8594;regnerisch (MC_1)"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc exc2 show_exc"><span class="n"><a id="t368" href="#t368">368</a></span><span class="t">        <span class="str">"Hinzuf&#252;gen: regnerisch&#8594;sonnig (MC_2)"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc exc2 show_exc"><span class="n"><a id="t369" href="#t369">369</a></span><span class="t">    <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t370" href="#t370">370</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t371" href="#t371">371</a></span><span class="t">    <span class="key">for</span> <span class="nam">i</span><span class="op">,</span> <span class="op">(</span><span class="nam">mc</span><span class="op">,</span> <span class="nam">name</span><span class="op">)</span> <span class="key">in</span> <span class="nam">enumerate</span><span class="op">(</span><span class="nam">zip</span><span class="op">(</span><span class="nam">chains</span><span class="op">,</span> <span class="nam">transformation_names</span><span class="op">)</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t372" href="#t372">372</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="fst">f"</span><span class="fst">\nF&#252;ge hinzu: </span><span class="op">{</span><span class="nam">name</span><span class="op">}</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t373" href="#t373">373</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="fst">f"</span><span class="fst">  </span><span class="op">{</span><span class="nam">mc</span><span class="op">}</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t374" href="#t374">374</a></span><span class="t">        <span class="nam">analysis</span><span class="op">.</span><span class="nam">add_markov_chain</span><span class="op">(</span><span class="nam">mc</span><span class="op">,</span> <span class="nam">transformation_name</span><span class="op">=</span><span class="nam">name</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t371" href="#t371">371</a></span><span class="t">    <span class="key">for</span> <span class="nam">i</span><span class="op">,</span> <span class="op">(</span><span class="nam">mc</span><span class="op">,</span> <span class="nam">name</span><span class="op">)</span> <span class="key">in</span> <span class="nam">enumerate</span><span class="op">(</span><span class="nam">zip</span><span class="op">(</span><span class="nam">chains</span><span class="op">,</span> <span class="nam">transformation_names</span><span class="op">)</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t372" href="#t372">372</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="fst">f"</span><span class="fst">\nF&#252;ge hinzu: </span><span class="op">{</span><span class="nam">name</span><span class="op">}</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t373" href="#t373">373</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="fst">f"</span><span class="fst">  </span><span class="op">{</span><span class="nam">mc</span><span class="op">}</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t374" href="#t374">374</a></span><span class="t">        <span class="nam">analysis</span><span class="op">.</span><span class="nam">add_markov_chain</span><span class="op">(</span><span class="nam">mc</span><span class="op">,</span> <span class="nam">transformation_name</span><span class="op">=</span><span class="nam">name</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t375" href="#t375">375</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t376" href="#t376">376</a></span><span class="t">    <span class="com"># F&#252;hre Analyse durch</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t377" href="#t377">377</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"\n"</span> <span class="op">+</span> <span class="str">"="</span><span class="op">*</span><span class="num">70</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t378" href="#t378">378</a></span><span class="t">    <span class="nam">results</span> <span class="op">=</span> <span class="nam">analysis</span><span class="op">.</span><span class="nam">analyze</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t377" href="#t377">377</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"\n"</span> <span class="op">+</span> <span class="str">"="</span><span class="op">*</span><span class="num">70</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t378" href="#t378">378</a></span><span class="t">    <span class="nam">results</span> <span class="op">=</span> <span class="nam">analysis</span><span class="op">.</span><span class="nam">analyze</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t379" href="#t379">379</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t380" href="#t380">380</a></span><span class="t">    <span class="com"># Gebe Ergebnisse aus</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t381" href="#t381">381</a></span><span class="t">    <span class="nam">analysis</span><span class="op">.</span><span class="nam">print_analysis</span><span class="op">(</span><span class="nam">results</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t381" href="#t381">381</a></span><span class="t">    <span class="nam">analysis</span><span class="op">.</span><span class="nam">print_analysis</span><span class="op">(</span><span class="nam">results</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t382" href="#t382">382</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t383" href="#t383">383</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"\n"</span> <span class="op">+</span> <span class="str">"="</span><span class="op">*</span><span class="num">70</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t384" href="#t384">384</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"ANALYSE ABGESCHLOSSEN"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t385" href="#t385">385</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"="</span><span class="op">*</span><span class="num">70</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t383" href="#t383">383</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"\n"</span> <span class="op">+</span> <span class="str">"="</span><span class="op">*</span><span class="num">70</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t384" href="#t384">384</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"ANALYSE ABGESCHLOSSEN"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t385" href="#t385">385</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">"="</span><span class="op">*</span><span class="num">70</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -474,7 +474,7 @@
             <a class="nav" href="z_145eef247bfb46b6_simulate_traffic_light_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.13.1">coverage.py v7.13.1</a>,
-            created at 2026-01-12 14:25 +0100
+            created at 2026-02-04 03:32 +0100
         </p>
     </div>
 </footer>

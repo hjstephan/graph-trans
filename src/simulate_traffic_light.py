@@ -6,8 +6,8 @@ durchläuft: Grün → Gelb → Rot → Rot-Gelb → Grün
 """
 
 import time
-from graph import Graph
-from transformation import Transformation
+from .graph import Graph
+from .transformation import Transformation
 
 
 def print_separator():

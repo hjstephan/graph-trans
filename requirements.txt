@@ -1,10 +1,10 @@
-# Core dependencies
-# (keine externen Abhängigkeiten für die Kernfunktionalität)
-
-# Development dependencies
-pytest>=7.4.0
-pytest-cov>=4.1.0
-
-# Optional: für zukünftige Visualisierung
-# matplotlib>=3.7.0
-# networkx>=3.1
+coverage
+-e git+ssh://git@github.com/hjstephan/graph-trans.git
+iniconfig
+numpy
+packaging
+pluggy
+Pygments
+pytest
+pytest-cov
+-e git+ssh://git@github.com/hjstephan/subgraph.git

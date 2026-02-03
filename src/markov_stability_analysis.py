@@ -6,8 +6,8 @@ import time
 import numpy as np
 from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass, field
-from markov_chain import MarkovChain
-from subgraph import Subgraph
+from .markov_chain import MarkovChain
+from src.subgraph import Subgraph
 
 
 @dataclass

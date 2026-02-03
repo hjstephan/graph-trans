@@ -3,8 +3,8 @@ Tests für die Transformation-Klasse
 """
 
 import pytest
-from graph import Graph
-from transformation import Transformation, TransformationError, apply_transformation
+from src.graph import Graph
+from src.transformation import Transformation, TransformationError, apply_transformation
 
 
 class TestTransformation:

@@ -11,9 +11,9 @@ import time
 import numpy as np
 from typing import List, Tuple, Dict, Optional
 from dataclasses import dataclass, field
-from graph import Graph
-from transformation import Transformation
-from subgraph import Subgraph
+from .graph import Graph
+from .transformation import Transformation
+from src.subgraph import Subgraph
 
 
 @dataclass

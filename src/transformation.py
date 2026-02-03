@@ -3,7 +3,7 @@ Transformation-Klasse zur Definition und Anwendung von Graphtransformationen.
 """
 
 from typing import Optional
-from graph import Graph
+from .graph import Graph
 
 
 class TransformationError(Exception):

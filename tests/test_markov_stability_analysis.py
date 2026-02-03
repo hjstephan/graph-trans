@@ -4,8 +4,8 @@ test_markov_stability_analysis.py - Tests für Markov-Ketten Stabilitätsanalyse
 
 import pytest
 import numpy as np
-from markov_chain import MarkovChain
-from markov_stability_analysis import (
+from src.markov_chain import MarkovChain
+from src.markov_stability_analysis import (
     MarkovState, MarkovSequence, MarkovStabilityAnalysis,
     create_weather_markov_example
 )
