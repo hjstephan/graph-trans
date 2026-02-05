@@ -1,5 +1,5 @@
 coverage
--e git+ssh://git@github.com/hjstephan/graph-trans.git
+-e git+ssh://git@github.com/hjstephan/graph-trans.git@main#egg
 iniconfig
 numpy
 packaging
@@ -7,4 +7,4 @@ pluggy
 Pygments
 pytest
 pytest-cov
--e git+ssh://git@github.com/hjstephan/subgraph.git
+-e git+ssh://git@github.com/hjstephan/subgraph.git@main#egg

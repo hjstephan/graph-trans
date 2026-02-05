@@ -102,7 +102,7 @@ g1 = Graph(...)
 # In Matrix konvertieren
 matrix, node_mapping = g1.to_adjacency_matrix()
 
-# Subgraph-Algorithmus anwenden
+# Subgraph Algorithmus anwenden
 algo = Subgraph()
 result = algo.compare_graphs(matrix1, matrix2)
 
@@ -122,7 +122,7 @@ g_result = Graph.from_adjacency_matrix(matrix, node_ids=list(node_mapping.keys()
 
 ## Systemstabilitätsanalyse (v2.1.0)
 
-Ergänzt wurde die vollständige Stabilitätsanalyse von Systemtransformationen mittels Subgraph-Algorithmus:
+Ergänzt wurde die vollständige Stabilitätsanalyse von Systemtransformationen mittels Subgraph Algorithmus:
 
 ```bash
 python system_stability_analysis.py
@@ -165,7 +165,7 @@ sim.print_analysis(analysis)
 
 ### Neue Funktionalität
 
-Version 3.0.0 erweitert den Subgraph-Algorithmus um eine vollständige Markov-Ketten Implementierung mit Stabilitätsanalyse. Diese Erweiterung ermöglicht die Analyse dynamischer Systeme durch die Evolution ihrer Übergangsmatrizen.
+Version 3.0.0 erweitert den Subgraph Algorithmus um eine vollständige Markov-Ketten Implementierung mit Stabilitätsanalyse. Diese Erweiterung ermöglicht die Analyse dynamischer Systeme durch die Evolution ihrer Übergangsmatrizen.
 
 ### Markov-Ketten Grundlagen
 
@@ -221,7 +221,7 @@ if mc.is_ergodic():
 Das Repository enthält folgende Beispiele:
 
 - **`simulate_traffic_light.py`**: Vollständige Simulation einer Ampelkreuzung mit Zustandsübergängen
-- **`system_stability_analysis.py`**: Stabilitätsanalyse mit Subgraph-Algorithmus (demonstriert am Ampelsystem)
+- **`system_stability_analysis.py`**: Stabilitätsanalyse mit Subgraph Algorithmus (demonstriert am Ampelsystem)
 - **`marcov_stability_analysis.py`**: Stabilitätsanalyse für Markov-Ketten
 
 ## Kontakt

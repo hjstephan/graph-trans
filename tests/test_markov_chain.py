@@ -470,7 +470,7 @@ class TestMarkovChainRepr:
 
 
 class TestAdjacencyMatrixIntegration:
-    """Tests für Integration mit Adjazenzmatrix (für Subgraph-Algorithmus)"""
+    """Tests für Integration mit Adjazenzmatrix (für Subgraph Algorithmus)"""
     
     def test_to_adjacency_matrix(self):
         """Test: Konvertierung zu Adjazenzmatrix"""

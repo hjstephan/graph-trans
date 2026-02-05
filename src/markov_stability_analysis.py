@@ -59,7 +59,7 @@ class MarkovSequence:
 class MarkovStabilityAnalysis:
     """
     Analysiert die Stabilität von Markov-Ketten durch
-    Transformation und Subgraph-Algorithmus.
+    Transformation und Subgraph Algorithmus.
     """
     
     def __init__(self):

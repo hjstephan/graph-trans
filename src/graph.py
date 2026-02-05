@@ -1,6 +1,6 @@
 """
 Graph-Klasse zur Repräsentation von Graphen mit farbcodierten Knoten und Kanten.
-Erweitert um Subgraph-Algorithmus Unterstützung.
+Erweitert um Subgraph Algorithmus Unterstützung.
 """
 
 from typing import List, Dict, Set, Optional, Tuple
@@ -185,14 +185,14 @@ class Graph:
                 f"edges={len(self._edges)})")
 
     # ============================================================================
-    # Subgraph-Algorithmus Schnittstellen (Konvertierung)
+    # Subgraph Algorithmus Schnittstellen (Konvertierung)
     # ============================================================================
 
     def to_adjacency_matrix(self) -> Tuple[np.ndarray, Dict[str, int]]:
         """
         Konvertiert den Graphen in eine Adjazenzmatrix.
         
-        Diese Methode dient als Schnittstelle zum Subgraph-Algorithmus,
+        Diese Methode dient als Schnittstelle zum Subgraph Algorithmus,
         der in subgraph.py implementiert ist.
         
         Returns:
@@ -217,7 +217,7 @@ class Graph:
         """
         Erstellt einen Graphen aus einer Adjazenzmatrix.
         
-        Diese Methode dient als Schnittstelle vom Subgraph-Algorithmus zurück.
+        Diese Methode dient als Schnittstelle vom Subgraph Algorithmus zurück.
         
         Args:
             matrix: Adjazenzmatrix (n x n)

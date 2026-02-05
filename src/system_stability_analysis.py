@@ -1,9 +1,9 @@
 """
-Systemstabilitätsanalyse durch Transformationsverlauf und Subgraph-Algorithmus.
+Systemstabilitätsanalyse durch Transformationsverlauf und Subgraph Algorithmus.
 
 Dieses Modul analysiert die Stabilität und Ruhelagen eines Systems durch:
 1. Speicherung aller Systemzustände während der Transformation
-2. Anwendung des Subgraph-Algorithmus auf die Zustandssequenz
+2. Anwendung des Subgraph Algorithmus auf die Zustandssequenz
 3. Identifikation von längsten zusammenhängenden Subgraph-Sequenzen
 """
 

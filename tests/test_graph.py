@@ -226,7 +226,7 @@ class TestGraph:
 
 
 class TestGraphSubgraphInterface:
-    """Tests für die Subgraph-Algorithmus Schnittstellen"""
+    """Tests für die Subgraph Algorithmus Schnittstellen"""
 
     def test_to_adjacency_matrix_empty_graph(self):
         """Test: Leerer Graph zu Adjazenzmatrix"""
